@@ -23,8 +23,6 @@ class ReportController {
         log.debug("Called ${controllerName} controller with params: ${params}")
     }
 
-
-	//@DefaultExceptionHandler
 	def list() {
 		def jsonResults = Report.list().collect{ it.encodeAsJson() }
 		render(view:"list", model:[reports: jsonResults])
@@ -35,8 +33,6 @@ class ReportController {
 	* Sets the session variables used on the preview. returns the output of the evaluation of the 
 	* bindings.
 	*/
-	/*@Track
-	@DefaultExceptionHandler*/
 	def setPreviewParams(){
 		//log.debug("Setting preview params: ${params}")
 		
@@ -56,8 +52,6 @@ class ReportController {
 		render json as JSON
 	}
 
-	/*@Track
-	@DefaultExceptionHandler*/
 	def preview(){
 		log.debug("Calling preview with params: ${params}")
 		def reportInstance = Report.get(params.long('id'))
@@ -69,8 +63,6 @@ class ReportController {
 		reportService.renderReportTemplate(templateDocument, binding, response, "${reportInstance.title}.pdf", true)
 	}
 
-	/*@Track
-	@DefaultExceptionHandler*/
 	def save() {
 		def reportParams = [title: params.title, templateDocument: "", reportParams: ""]
 		
@@ -96,8 +88,7 @@ class ReportController {
 		render json as JSON
 	}
 
-	/*@Track
-	@DefaultExceptionHandler*/
+
 	def show() {
 		def reportInstance = Report.get(params.long('id'))
 		if (!reportInstance) {
@@ -109,8 +100,7 @@ class ReportController {
 		[reportInstance: reportInstance, canView: true, canEdit: true]
 	}
 
-	/*@Track
-	@DefaultExceptionHandler*/
+
 	def update() {
 		log.debug("called update with params: ${params}")
 		def reportInstance = Report.get(params.long('id'))
@@ -132,8 +122,7 @@ class ReportController {
 		render json as JSON
 	}
 
-	/*@Track
-	@DefaultExceptionHandler*/
+
 	def delete(){
 		log.debug("called update with params: ${params}")
 		def reportInstance = Report.get(params.long('id'))

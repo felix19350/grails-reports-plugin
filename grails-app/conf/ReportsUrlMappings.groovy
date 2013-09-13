@@ -2,6 +2,11 @@ class ReportsUrlMappings {
 
 	static mappings = {
 
+
+        "/"(controller: "index") {
+            action = [GET: "index"]
+        }
+
         name reportsList: "/reports"(controller: "report", parseRequest: true) {
             action = [GET: "list"]
         }
@@ -27,7 +32,6 @@ class ReportsUrlMappings {
 			}
 		}
 
-		"/"(view:"/index")
 		"500"(view:'/error')
 	}
 }
