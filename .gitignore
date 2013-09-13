@@ -1,0 +1,56 @@
+# web application files
+WEB-INF
+
+
+
+# IDE support files
+.classpath
+*.orig
+.project
+.settings
+.idea
+*.launch
+.tmproj
+/ivy*
+/eclipse
+/*.sublime-project
+
+# logs
+stacktrace.log
+
+# project release file
+*.war
+
+# plugin release file
+*.zip
+
+# "temporary" build files
+target
+
+# other
+*.iws
+*.iml
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+*.db
+*.ser
+
+# OS generated files
+.DS_Store*
+ehthumbs.db
+Thumbs.db
+
+web-app/js/messages.js
+web-app/plugins
+manifest.yml
+
+web-app/backups
+
+id_file
+fallback-dev
+plugin.xml
+
+
