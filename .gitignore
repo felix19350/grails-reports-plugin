@@ -1,56 +1,43 @@
 # web application files
-WEB-INF
-
-
+/web-app/WEB-INF
 
 # IDE support files
-.classpath
-*.orig
-.project
-.settings
-.idea
-*.launch
-.tmproj
+/.classpath
+/.launch
+/.project
+/.settings
+/*.launch
+/*.tmproj
 /ivy*
 /eclipse
-/*.sublime-project
+
+# default HSQL database files for production mode
+/prodDb.*
+
+# general HSQL database files
+*Db.properties
+*Db.script
 
 # logs
-stacktrace.log
+/stacktrace.log
+/test/reports
+/logs
 
 # project release file
-*.war
+/*.war
 
 # plugin release file
-*.zip
+/*.zip
+/plugin.xml
+
+
+# older plugin install locations
+/plugins
+/web-app/plugins
+/web-app/WEB-INF/classes
 
 # "temporary" build files
-target
+/target
 
 # other
 *.iws
-*.iml
-
-# Logs and databases
-*.log
-*.sql
-*.sqlite
-*.db
-*.ser
-
-# OS generated files
-.DS_Store*
-ehthumbs.db
-Thumbs.db
-
-web-app/js/messages.js
-web-app/plugins
-manifest.yml
-
-web-app/backups
-
-id_file
-fallback-dev
-plugin.xml
-
-
