@@ -1,20 +1,14 @@
 package org.grails.plugins.reports
 
-import exception.CreateException
-import exception.DeleteException
-import exception.NotFoundException
-import exception.UpdateException
 import grails.converters.JSON
-//import grails.plugins.springsecurity.Secured
 import grails.util.GrailsUtil
+
 import groovy.ui.SystemOutputInterceptor
 import org.springframework.dao.DataIntegrityViolationException
 
-//@Secured(['ROLE_ADMIN'])
 class ReportController {
 
 	def reportService
-
 
     /**
      * Print logs
@@ -102,7 +96,7 @@ class ReportController {
 
 
 	def update() {
-		log.debug("called update with params: ${params}")
+		log.debug("Go to update report #${params.id}")
 		def reportInstance = Report.get(params.long('id'))
 		if (!reportInstance) {
 			throw new NotFoundException(params.id, Report)    
@@ -124,7 +118,7 @@ class ReportController {
 
 
 	def delete(){
-		log.debug("called update with params: ${params}")
+		log.debug("Go to delete report #${params.id}")
 		def reportInstance = Report.get(params.long('id'))
 		if (!reportInstance) {
 			throw new NotFoundException(params.id, Report)

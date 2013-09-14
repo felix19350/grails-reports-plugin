@@ -1,4 +1,4 @@
-package exception
+package org.grails.plugins.reports
 
 import org.springframework.validation.FieldError
 

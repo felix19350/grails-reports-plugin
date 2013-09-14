@@ -1,6 +1,6 @@
 package org.grails.plugins.services
 
-import exception.NotFoundException
+import org.grails.plugins.reports.NotFoundException
 import grails.util.GrailsUtil
 import grails.util.GrailsWebUtil
 import groovy.text.Template
