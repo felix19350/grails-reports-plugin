@@ -29,7 +29,7 @@
 # plugin release file
 /*.zip
 /plugin.xml
-
+/*.sha1
 
 # older plugin install locations
 /plugins
