@@ -20,7 +20,18 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 
-    warn   'org.mortbay.log'
+    warn   'org.mortbay.log',
+           'org.apache.catalina'
+
+    debug 'grails.app.conf',
+          'grails.app.filters',
+          'grails.app.taglib',
+          'grails.app.services',
+          'grails.app.controllers',
+          'grails.app.domain'
+
+    error 'grails.app.taglib.org.grails.plugin.resource.ResourceTagLib'  
+
 }
 
 
@@ -55,4 +66,9 @@ grails.resources.adhoc.patterns = [
 grails.resources.processing.startup = "delayed"
 grails.views.default.codec="none" // none, html, base64
 grails.views.gsp.encoding="UTF-8"
+
+
 grails.serverURL = "http://localhost:8080/${appName}"
+
+
+

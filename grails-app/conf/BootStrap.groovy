@@ -8,7 +8,7 @@ class BootStrap {
     }
 
     private void initReports(def servletContext) {
-        println ("init reports")
+        log.debug ("init reports")
         def reports = [
                 [title: "exampleReportTitle", hook: "exampleReportHook"],
         ]
