@@ -9,13 +9,10 @@ class ReportsGrailsPlugin {
         "grails-app/views/error.gsp"
     ]
 
-    // TODO Fill in these fields
     def title = "Grails Reports Plugin" // Headline display name of the plugin
-    def author = "Bruno Félix, Hugo Monteiro, Nuno Luís"
-    def authorEmail = "felix19350@gmail.com, hugo.monteiro@gmail.com, nuno.lopes.luis@gmail.com"
-    def description = '''\
-        Tool to generate reports using a template.
-'''
+    def author = "Bruno Félix"
+    def authorEmail = "felix19350@gmail.com"
+    def description = '''Tool to generate reports using a template.'''
 
     // URL to the plugin's documentation
     def documentation = "https://github.com/felix19350/grails-reports-plugin"
@@ -23,19 +20,22 @@ class ReportsGrailsPlugin {
     // Extra (optional) plugin metadata
 
     // License: one of 'APACHE', 'GPL2', 'GPL3'
-//    def license = "APACHE"
+    def license = "MIT"
 
     // Details of company behind the plugin (if there is one)
-//    def organization = [ name: "My Company", url: "http://www.my-company.com/" ]
+    // def organization = [ name: "My Company", url: "http://www.my-company.com/" ]
 
     // Any additional developers beyond the author specified above.
-//    def developers = [ [ name: "Joe Bloggs", email: "joe@bloggs.net" ]]
+    def developers = [
+        [name: "Hugo Monteiro", email: "hugo.monteiro@gmail.com"],
+        [name:'Nuno Luís', email:"nuno.lopes.luis@gmail.com"]
+    ]
 
     // Location of the plugin's issue tracker.
-//    def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPMYPLUGIN" ]
+    // def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPMYPLUGIN" ]
 
     // Online location of the plugin's browseable source code.
-//    def scm = [ url: "http://svn.codehaus.org/grails-plugins/" ]
+    def scm = [ url: "https://github.com/felix19350/grails-reports-plugin" ]
 
     def doWithWebDescriptor = { xml ->
         // TODO Implement additions to web.xml (optional), this event occurs before
