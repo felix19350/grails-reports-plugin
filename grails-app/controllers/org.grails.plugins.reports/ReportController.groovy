@@ -13,9 +13,9 @@ class ReportController {
     /**
      * Print logs
      */
-    def beforeInterceptor = {
-        log.debug("Called ${controllerName} controller with params: ${params}")
-    }
+    //def beforeInterceptor = {
+    //    log.debug("Called ${controllerName} controller with params: ${params}")
+    //}
 
 	def list() {
 		def jsonResults = Report.list().collect{ it.encodeAsJson() }
@@ -47,7 +47,7 @@ class ReportController {
 	}
 
 	def preview(){
-		log.debug("Calling preview with params: ${params}")
+		log.debug("Call preview report #${params.id}")
 		def reportInstance = Report.get(params.long('id'))
 
 		def dbBinding = eval(reportInstance.sampleBinding, [:]) 

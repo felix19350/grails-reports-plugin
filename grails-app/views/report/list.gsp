@@ -6,20 +6,15 @@
 		<g:set var="entityName" value="${message(code: 'report.label', default: 'Report')}" />
 		<title><g:message code="default.list.label" args="[entityName]" /></title>
 
-        <r:require module="reportsBackboneViews"/>
+        <r:require module="reportsStyle"/>
+        <r:require module="reportsViews"/>
 
 		<r:script>
-
 			$(function(){
 				var collection = new AppModels.ReportCollection(${reports as JSON});
 				var reportListView = new AppViews.ReportListView ({collection: collection});	
 			});
 		</r:script>
-
-
-        <script id="reportListItemTpl" type="text/template">
-            <td>{{= title }}</td><td>{{= hook }}</td>
-        </script>
 
 	</head>
 	<body>
@@ -62,7 +57,8 @@
 
 		</div>
 
-
+		<g:render template="reportListItemTpl"/>
+		<g:render template="defaultDeleteDialogTpl"/>
 
     </body>
 </html>

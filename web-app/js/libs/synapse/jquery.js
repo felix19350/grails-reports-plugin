@@ -200,7 +200,7 @@ var __slice = Array.prototype.slice;
       }
     });
   })();
-  domEvents = [['a,button,[type=button],[type=reset]', 'click'],['select,[type=checkbox],[type=radio],[type=text],[type="email"],[type="number"],[type="url"],textarea', 'change'], ['[type=submit]', 'submit'], ['input', 'keyup']];
+  domEvents = [['a,button,[type=button],[type=reset]', 'click'], ['select,[type=checkbox],[type=radio],textarea', 'change'], ['[type=submit]', 'submit'], ['input', 'keyup']];
   elementInterfaces = [['[type=checkbox],[type=radio]', 'checked'], ['input,textarea,select', 'value']];
   elementBindAttributes = ['name', 'role', 'data-bind'];
   return {

@@ -6,8 +6,9 @@
 		<g:set var="entityName" value="${message(code: 'report.label', default: 'report')}" />
 		<title><g:message code="default.edit.label" args="[entityName]" /></title>
 		
+		<r:require module="reportsStyle"/>
 		<r:require module="reportsCodemirror"/>
-		<r:require module="reportsBackboneViews"/>
+		<r:require module="reportsViews"/>
 		
 		<r:script>
 			$(function(){
@@ -106,5 +107,9 @@
 			</div>
 
 		</div>
+
+		<g:render template="reportListItemTpl"/>
+		<g:render template="defaultDeleteDialogTpl"/>
+
 	</body>
 </html>
