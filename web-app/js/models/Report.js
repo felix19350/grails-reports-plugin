@@ -7,20 +7,22 @@ jQuery(function(){
 		mode: undefined,
 
 		fields: [
+		"name",
 		"title",
-		"hook",
 		"templateDocument",
-		"sampleBinding",
+		"bindingBuilder",
 		"output",
-		"exception"
+		"exception",
+		"sampleParams"
 		],
 		defaults: {
-			"hook":				"",
+			"name":				"",
             "title":            "",
 			"templateDocument": "",
-            "sampleBinding":    "",
+            "bindingBuilder":    "",
             "output":           "",
-            "exception":        ""
+            "exception":        "",
+            "sampleParams":     ""
 		}, 
 		
 		validation: { },

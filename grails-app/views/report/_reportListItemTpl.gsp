@@ -1,4 +1,5 @@
 <script id="reportListItemTpl" type="text/template">
+        <td>{{= id }}</td>
+        <td>{{= name }}</td>
         <td>{{= title }}</td>
-        <td>{{= hook }}</td>
 </script>

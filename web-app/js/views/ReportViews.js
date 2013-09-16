@@ -49,7 +49,7 @@ jQuery(function () {
                 lineWrapping: true
             });
 
-            var bindingTextarea = this.$("textarea[name='sampleBinding']");
+            var bindingTextarea = this.$("textarea[name='bindingBuilder']");
             this.bindingEditor = CodeMirror.fromTextArea(bindingTextarea.get(0), {
                 lineNumbers: true,
                 matchBrackets: true,
@@ -78,7 +78,7 @@ jQuery(function () {
             var self = this;
             this.model.set({
                 templateDocument: this.templateEditor.getValue(),
-                sampleBinding: this.bindingEditor.getValue()
+                bindingBuilder: this.bindingEditor.getValue()
             });
 
             this.model.setPreviewMode();
@@ -100,7 +100,7 @@ jQuery(function () {
 
             this.model.set({
                 templateDocument: this.templateEditor.getValue(),
-                sampleBinding: this.bindingEditor.getValue()
+                bindingBuilder: this.bindingEditor.getValue()
             });
 
             this.model.save();

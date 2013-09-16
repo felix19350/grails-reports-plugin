@@ -1,7 +1,7 @@
+import org.grails.plugins.reports.ReportUtils
+
 class BootStrap {
     def grailsApplication
-    def reportUtilsService
-
 
     def init = { servletContext ->
         initReports(servletContext)
@@ -10,10 +10,10 @@ class BootStrap {
     private void initReports(def servletContext) {
         log.debug ("init reports")
         def reports = [
-                [title: "exampleReportTitle", hook: "exampleReportHook"],
+            [name: "exampleReport", title: "Example report"]
         ]
-
-        reportUtilsService.verifyReports(reports, servletContext)
+        
+        ReportUtils.updateReportsFromResources(servletContext, reports)
     }
 
 

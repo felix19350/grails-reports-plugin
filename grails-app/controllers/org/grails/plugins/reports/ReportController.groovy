@@ -28,54 +28,61 @@ class ReportController {
 	* bindings.
 	*/
 	def setPreviewParams(){
-		//log.debug("Setting preview params: ${params}")
+		log.debug("Setting preview params: ${params.id}")
 		
 		//Setup the session variables
-		def result = eval(params.sampleBinding, [:])
-		session.report = [templateDocument: params.templateDocument]
-		session?.report?.binding = result.result ?: [:]
+		def sampleParamsEval = eval(params.sampleParams, [:]) ?: [:]
+		def bindingBuilderEval = eval(params.bindingBuilder, [params: sampleParamsEval.result]) ?: [:]
+
+		session.report = [
+			templateDocument: params.templateDocument,
+			sampleParams: sampleParamsEval.result,
+			binding : bindingBuilderEval.result
+		]
 
 		//Prepare the output so that the ui is updated
 		def reportInstance = Report.get(params.long('id'))
 		def json = reportInstance.encodeAsJson()
 		json.templateDocument = params.templateDocument
-		json.sampleBinding = params.sampleBinding
-		json.output = result.output
-		json.exception = result.exception
+		json.sampleParams = params.sampleParams
+		json.bindingBuilder = params.bindingBuilder
+
+		json.output = bindingBuilderEval.output
+		json.exception = bindingBuilderEval.exception
 
 		render json as JSON
 	}
 
 	def preview(){
 		log.debug("Call preview report #${params.id}")
+		
 		def reportInstance = Report.get(params.long('id'))
+		if (!reportInstance) {
+			throw new NotFoundException(params.id, Report)
+		}
 
-		def dbBinding = eval(reportInstance.sampleBinding, [:]) 
-		def binding = session?.report?.binding ?: dbBinding.result ?: [:]
-		def templateDocument = session?.report?.templateDocument ?: reportInstance.templateDocument
+		if(!session.report) {
+			def sampleParamsEval = eval(reportInstance.sampleParams, [:]) ?: [:]
+			def bindingBuilderEval = eval(reportInstance.bindingBuilder, [params: sampleParamsEval.result]) ?: [:]
+			session.report = [
+				templateDocument: reportInstance.templateDocument,
+				sampleParams: sampleParamsEval.result,
+				binding : bindingBuilderEval.result
+			]
+		} 
+
+		def binding = session.report.binding ?: [:]
+		def templateDocument = session.report.templateDocument ?: reportInstance.templateDocument
 
 		reportService.renderReportTemplate(templateDocument, binding, response, "${reportInstance.title}.pdf", true)
 	}
 
 	def save() {
-		def reportParams = [title: params.title, templateDocument: "", reportParams: ""]
+		def reportParams = [name: params.name, title: params.title, templateDocument: "", reportParams: ""]
 		
 		def reportInstance = new Report(reportParams)
 		if (!reportInstance.save(flush: true)) {
 			throw new CreateException(reportInstance)
-		}
-
-		if(params.hook){
-			def hookId = params.long("hook")
-			def hook = ReportHook.get(hookId)
-			if(!hook){
-				throw new NotFoundException(hookId, ReportHook)
-			}
-			
-			hook.report = reportInstance
-			if(!hook.save()){
-				throw new UpdateException(hook)
-			}
 		}
 		
 		def json = reportInstance.encodeAsJson()
@@ -131,6 +138,19 @@ class ReportController {
 		
 		render(status: '200', contentType: "text/json") { ["message": g.message(code: 'default.delete.message')] }   
 	}
+
+
+	def renderReport() {
+		def reportInstance = Report.get(params.long('id'))
+		if (!reportInstance) {
+			throw new NotFoundException(params.id, Report)
+		}
+
+		def binding = reportInstance.evalBinding(params)
+		reportService.renderReport(reportInstance, binding, response, "${reportInstance.title}", true)
+	}
+
+
 
     @SuppressWarnings("CatchThrowable")
     private Map eval(String code, Map bindingValues) {

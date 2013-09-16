@@ -53,6 +53,8 @@
 
 				<ui:property name="title" label="${g.message(code:'report.title.label')}" labelClass="span2 bold" viewable="${canView}" editable="${canEdit}" inputClass="span10" valueClass="span10"/>
 
+				<ui:property name="sampleParams" label="${g.message(code:'report.sampleParams.label')}" labelClass="span2 bold" viewable="${canView}" editable="${canEdit}" inputClass="span10" valueClass="span10"/>
+
 				<div class="accordion" id="ide-input1">
 					<div class="accordion-group">
 						<div class="accordion-heading">
@@ -70,7 +72,7 @@
 							<a class="accordion-toggle" data-toggle="collapse" data-parent="#ide-input" href="#ide-binding">Binding</a>
 						</div>
 						<div class="accordion-body in collapse editing" id="ide-binding">
-							<ui:property name="sampleBinding" type="textarea"  editable="${canEdit}" viewable="true" inputContainerClass="cleared default-margin-left" inputClass="span12" valueClass="span12"/>
+							<ui:property name="bindingBuilder" type="textarea"  editable="${canEdit}" viewable="true" inputContainerClass="cleared default-margin-left" inputClass="span12" valueClass="span12"/>
 						</div>
 					</div>
 				</div>

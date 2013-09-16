@@ -25,8 +25,9 @@
 				<table class="table table-main table-striped table-bordered">
 					<thead>
 						<tr>
+							<ui:sortableColumn property="id" label="report.id.label"/>
+							<ui:sortableColumn property="name" label="report.name.label"/>
 							<ui:sortableColumn property="title" label="report.title.label"/>
-							<th>Hooks</th>
 						</tr>
 					</thead>
 					<tbody id="reportTable" class="links">
@@ -46,8 +47,24 @@
 			</div>
 			<div class="modal-body">
 				<div class="editing">
-					<ui:property name="title" label="${g.message(code:'report.title.label')}" labelClass="span2 bold" viewable="false" editable="true" inputClass="span3" valueClass="span3"/>
-					<ui:property name="hook" type="select" label="Hook" labelClass="span2 bold" options="${ org.grails.plugins.reports.ReportHook.list() }"  viewable="false" editable="true" optionKey="id" optionValue="name" noSelection="${ [null: 'None'] }"/>
+					<ui:property
+						name="name"
+						label="${g.message(code:'report.name.label')}"
+						labelClass="span2 bold"
+						viewable="false"
+						editable="true"
+						inputClass="span3"
+						valueClass="span3"
+					/>
+					<ui:property
+						name="title"
+						label="${g.message(code:'report.title.label')}"
+						labelClass="span2 bold"
+						viewable="false"
+						editable="true"
+						inputClass="span3"
+						valueClass="span3"
+					/>
 				</div>
 			</div>
 			<div class="modal-footer">

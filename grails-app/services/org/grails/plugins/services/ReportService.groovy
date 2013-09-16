@@ -17,7 +17,6 @@ import org.codehaus.groovy.grails.web.pages.exceptions.GroovyPagesException
 import org.codehaus.groovy.grails.web.servlet.WrappedResponseHolder
 import org.codehaus.groovy.runtime.IOGroovyMethods
 import org.grails.plugins.reports.Report
-import org.grails.plugins.reports.ReportHook
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
 import org.springframework.web.context.request.RequestContextHolder
@@ -50,24 +49,19 @@ class ReportService {
      * Renders the report to one http response that can be to see in browser (isInline = true) or to download (isInline = false)
      * the filename will be report.title + ' - ' + filesubname + '.pdf'
      *
-     * @param hookName
+     * @param name
      * @param binding
      * @param response
      * @param filesubname
      * @param isInline
      *
      */
-    public void renderHookReport(String hookName, Map binding, HttpServletResponse response, String filesubname = null, boolean isInline = true) {
-        log.debug("Render hook report '${hookName}' to http response")
-        def hook = ReportHook.findByName(hookName)
+    public void renderReport(String name, Map binding, HttpServletResponse response, String filesubname = null, boolean isInline = true) {
+        log.debug("Render report '${name}' to http response")
+        def reportInstance = Report.findByName(name)
 
-        if (!hook) {
-            throw new NotFoundException(hookName, ReportHook)
-        }
-
-        def reportInstance = hook.report
         if (!reportInstance) {
-            throw new NotFoundException(hookName, Report)
+            throw new NotFoundException(name, Report)
         }
 
         renderReport(reportInstance, binding, response, filesubname, isInline)
@@ -75,21 +69,16 @@ class ReportService {
 
     /**
      * Renders the report and returns the PDF bytes
-     * @param hookName
+     * @param name
      * @param binding
      *
      */
-    public byte[] renderHookReport(String hookName, Map binding) {
-        log.debug("Render hook report '${hookName}'")
-        def hook = ReportHook.findByName(hookName)
+    public byte[] renderReport(String name, Map binding) {
+        log.debug("Render report '${name}'")
+        def reportInstance = Report.findByName(name)
 
-        if (!hook) {
-            throw new NotFoundException(hookName, ReportHook)
-        }
-
-        def reportInstance = hook.report
         if (!reportInstance) {
-            throw new NotFoundException(hookName, Report)
+            throw new NotFoundException(name, Report)
         }
 
         def templateDocument = reportInstance.templateDocument
@@ -102,7 +91,7 @@ class ReportService {
     }
 
     // gets template source and filename
-    private void renderReport(Report reportInstance, Map binding, HttpServletResponse response, String filesubname, boolean isInline) {
+    public void renderReport(Report reportInstance, Map binding, HttpServletResponse response, String filesubname, boolean isInline) {
         def templateDocument = reportInstance.templateDocument
         def filename = reportInstance.title
 
