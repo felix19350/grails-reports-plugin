@@ -262,7 +262,7 @@ jQuery(function () {
             this.model.bind('change', this.render, this);
         },
 
-        show: function () {
+        show: function (e) {
             e.preventDefault();
             window.location = this.model.url();
         },
