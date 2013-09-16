@@ -57,6 +57,19 @@ class ReportController {
 		reportService.renderReportTemplate(templateDocument, binding, response, "${reportInstance.title}.pdf", true)
 	}
 
+    def download() {
+        log.debug("Call download report #${params.id}")
+        def reportInstance = Report.get(params.long('id'))
+        def reportHook = ReportHook.findByReport(reportInstance)
+
+        def dbBinding = eval(reportInstance.sampleBinding, [:])
+        //def templateDocument = session?.report?.templateDocument ?: reportInstance.templateDocument
+
+        reportService.renderHookReport(reportHook.name, dbBinding.result, response, null, false)
+    }
+
+
+
 	def save() {
 		def reportParams = [title: params.title, templateDocument: "", reportParams: ""]
 		

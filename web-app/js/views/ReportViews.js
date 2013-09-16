@@ -254,7 +254,8 @@ jQuery(function () {
         template: _.template($('#reportListItemTpl').html()),
 
         events: {
-            "click": "show"
+            "click": "show",
+            "click .download" : "downloadReport"
         },
 
         initialize: function () {
@@ -262,9 +263,14 @@ jQuery(function () {
         },
 
         show: function () {
+            e.preventDefault();
             window.location = this.model.url();
         },
-
+        downloadReport: function(e) {
+            e.preventDefault();
+            var url = App.serverURL + "/report/download/" + this.model.get("id");
+            window.location = url;
+        },
         render: function () {
             var data = this.model.toJSON();
             this.$el.html(this.template(data));

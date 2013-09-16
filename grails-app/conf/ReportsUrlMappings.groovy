@@ -7,6 +7,8 @@ class ReportsUrlMappings {
             action = [GET: "index"]
         }
 
+
+
         name reportsList: "/reports"(controller: "report", parseRequest: true) {
             action = [GET: "list"]
         }
@@ -19,6 +21,12 @@ class ReportsUrlMappings {
         //Previews a PDF. It returns the pdf
         "/report/$id/preview"(controller: "report") {
             action = [GET: "preview"]
+        }
+
+
+        // download report
+        "/report/download/$id"(controller: "report", parseRequest: true) {
+            action = [GET: "download"]
         }
 
         //CRUD operations over a report

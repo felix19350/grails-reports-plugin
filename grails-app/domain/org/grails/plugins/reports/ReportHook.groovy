@@ -6,7 +6,7 @@ class ReportHook {
 	Report report
 	
     static constraints = {
-		name shared:'uniqueString'
+		name unique: true, nullable: false, blank: false, maxSize: 255
 		report nullable: true
     }
 	
