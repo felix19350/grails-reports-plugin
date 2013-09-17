@@ -91,7 +91,7 @@ class ReportController {
 
 
 	def save() {
-		def reportParams = [name: params.name, title: params.title, templateDocument: "", reportParams: ""]
+		def reportParams = [name: params.name, title: params.title, templateDocument: "", bindingBuilder: "[:]", sampleParams: "[:]"]
 		
 		def reportInstance = new Report(reportParams)
 		if (!reportInstance.save(flush: true)) {
@@ -122,7 +122,7 @@ class ReportController {
 			throw new NotFoundException(params.id, Report)    
 		}
 
-		def reportParams = [title: params.title, templateDocument: params.templateDocument, sampleBinding: params.sampleBinding, sampleParams: params.sampleParams]
+		def reportParams = [title: params.title, templateDocument: params.templateDocument, bindingBuilder: params.bindingBuilder, sampleParams: params.sampleParams]
 		reportInstance.properties = reportParams
 
 		if (!reportInstance.save(flush: true)) {

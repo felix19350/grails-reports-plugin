@@ -209,10 +209,10 @@ jQuery(function () {
 
         save: function () {
             var title = this.createDialog.find("input[name='title']").val();
-            var hook = this.createDialog.find("select[name='hook']").val();
+            var name = this.createDialog.find("input[name='name']").val();
             var model = new AppModels.Report({
                 title: title,
-                hook: hook
+                name: name
             });
 
             var self = this;
@@ -267,7 +267,7 @@ jQuery(function () {
             window.location = this.model.url();
         },
         downloadReport: function(e) {
-            e.preventDefault();
+            e.stopPropagation();
             var url = App.serverURL + "/report/download/" + this.model.get("id");
             window.location = url;
         },

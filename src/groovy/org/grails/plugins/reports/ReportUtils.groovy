@@ -18,8 +18,8 @@ public class ReportUtils {
 			Report report = Report.findByName(name)
 			if(report == null) {
 				String templateDocument = loadResourceContent(servletContext, "${name}.gsp")
-                                String bindingBuilder = loadResourceContent(servletContext, "${name}.groovy")
-                                String sampleParams = loadResourceContent(servletContext, "${name}.params.groovy")
+                                String bindingBuilder = loadResourceContent(servletContext, "${name}.groovy", "[:]")
+                                String sampleParams = loadResourceContent(servletContext, "${name}.params.groovy", "[:]")
                 
                                 report = new Report(
                                         name: name,
@@ -34,11 +34,11 @@ public class ReportUtils {
 		}
 	}
 
-	private static String loadResourceContent(ServletContext servletContext, String filename) {
+	private static String loadResourceContent(ServletContext servletContext, String filename, String defaultText = "") {
                 String filePath = "${REPORTS_FOLDER}/${filename}"
                 log.debug("loading report from ${filePath}")
                 InputStream input = servletContext.getResourceAsStream(filePath)
-                String content = input?.getText() ?: ""
+                String content = input?.getText() ?: defaultText
                 return content
 	}
 

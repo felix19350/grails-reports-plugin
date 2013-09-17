@@ -26,7 +26,7 @@ public class Report {
 	}
 
     static constraints = {
-    	name unique: true, maxSize: 255
+    	name unique: true, maxSize: 255, matches: "[a-zA-Z]+", nullable: false, blank: false
     	bindingBuilder nullable: true
 	}
 
