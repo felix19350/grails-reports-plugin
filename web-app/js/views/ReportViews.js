@@ -254,7 +254,7 @@ jQuery(function () {
         template: _.template($('#reportListItemTpl').html()),
 
         events: {
-            "click .cl": "show",
+            "click": "show",
             "click .download" : "downloadReport"
         },
 

@@ -122,7 +122,7 @@ class ReportController {
 			throw new NotFoundException(params.id, Report)    
 		}
 
-		def reportParams = [title: params.title, templateDocument: params.templateDocument, sampleBinding: params.sampleBinding]
+		def reportParams = [title: params.title, templateDocument: params.templateDocument, sampleBinding: params.sampleBinding, sampleParams: params.sampleParams]
 		reportInstance.properties = reportParams
 
 		if (!reportInstance.save(flush: true)) {
