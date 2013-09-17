@@ -254,17 +254,23 @@ jQuery(function () {
         template: _.template($('#reportListItemTpl').html()),
 
         events: {
-            "click": "show"
+            "click .cl": "show",
+            "click .download" : "downloadReport"
         },
 
         initialize: function () {
             this.model.bind('change', this.render, this);
         },
 
-        show: function () {
+        show: function (e) {
+            e.preventDefault();
             window.location = this.model.url();
         },
-
+        downloadReport: function(e) {
+            e.preventDefault();
+            var url = App.serverURL + "/report/download/" + this.model.get("id");
+            window.location = url;
+        },
         render: function () {
             var data = this.model.toJSON();
             this.$el.html(this.template(data));

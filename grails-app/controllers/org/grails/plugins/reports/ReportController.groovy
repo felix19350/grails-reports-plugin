@@ -77,6 +77,19 @@ class ReportController {
 		reportService.renderReportTemplate(templateDocument, binding, response, "${reportInstance.title}.pdf", true)
 	}
 
+    def download() {
+        log.debug("Call download report #${params.id}")
+        def reportInstance = Report.get(params.long('id'))
+		if (!reportInstance) {
+			throw new NotFoundException(params.id, Report)
+		}
+
+		def binding = reportInstance.evalBinding(params)
+		reportService.renderReport(reportInstance, binding, response, "${reportInstance.title}", false)
+    }
+
+
+
 	def save() {
 		def reportParams = [name: params.name, title: params.title, templateDocument: "", reportParams: ""]
 		

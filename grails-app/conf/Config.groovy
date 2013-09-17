@@ -99,22 +99,6 @@ log4j = {
 }
 
 
-/*******************************
- * GORM constraints
- *******************************/
-
-grails.gorm.default.constraints = {
-    notEmptyCollection(nullable: false, minSize: 1)
-    uniqueOptionalString(nullable: true, blank: true, maxSize: 255, unique: true)
-    optionalString(nullable: true, blank: true, maxSize: 255)
-    requiredString(nullable: false, blank: false, maxSize: 255)
-    optionalText(nullable: true, blank: true)
-    requiredText(nullable: false, blank: false)
-    uniqueString(unique: true, nullable: false, blank: false, maxSize: 255)
-    username(nullable: false, blank: false, unique: true)
-    password(nullable: false, blank: false)
-}
-
 // What URL patterns should be processed by the resources plugin
 grails.resources.adhoc.patterns = [
         '/images/*',
