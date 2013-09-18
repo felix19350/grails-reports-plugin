@@ -24,12 +24,12 @@ class ReportController {
 
 
 	/**
-	* Sets the session variables used on the preview. returns the output of the evaluation of the 
+	* Sets the session variables used on the preview. returns the output of the evaluation of the
 	* bindings.
 	*/
 	def setPreviewParams(){
 		log.debug("Setting preview params: ${params.id}")
-		
+
 		//Setup the session variables
 		def sampleParamsEval = eval(params.sampleParams, [:]) ?: [:]
 		def bindingBuilderEval = eval(params.bindingBuilder, [params: sampleParamsEval.result]) ?: [:]
@@ -55,7 +55,7 @@ class ReportController {
 
 	def preview(){
 		log.debug("Call preview report #${params.id}")
-		
+
 		def reportInstance = Report.get(params.long('id'))
 		if (!reportInstance) {
 			throw new NotFoundException(params.id, Report)
@@ -69,7 +69,7 @@ class ReportController {
 				sampleParams: sampleParamsEval.result,
 				binding : bindingBuilderEval.result
 			]
-		} 
+		}
 
 		def binding = session.report.binding ?: [:]
 		def templateDocument = session.report.templateDocument ?: reportInstance.templateDocument
@@ -84,20 +84,20 @@ class ReportController {
 			throw new NotFoundException(params.id, Report)
 		}
 
-		def binding = reportInstance.evalBinding(params)
-		reportService.renderReport(reportInstance, binding, response, "${reportInstance.title}", false)
+		def binding = reportInstance.evalBinding() // use sample params from the report
+		reportService.renderReport(reportInstance, binding, response, null, false)
     }
 
 
 
 	def save() {
 		def reportParams = [name: params.name, title: params.title, templateDocument: "", bindingBuilder: "[:]", sampleParams: "[:]"]
-		
+
 		def reportInstance = new Report(reportParams)
 		if (!reportInstance.save(flush: true)) {
 			throw new CreateException(reportInstance)
 		}
-		
+
 		def json = reportInstance.encodeAsJson()
 		render json as JSON
 	}
@@ -119,7 +119,7 @@ class ReportController {
 		log.debug("Go to update report #${params.id}")
 		def reportInstance = Report.get(params.long('id'))
 		if (!reportInstance) {
-			throw new NotFoundException(params.id, Report)    
+			throw new NotFoundException(params.id, Report)
 		}
 
 		def reportParams = [title: params.title, templateDocument: params.templateDocument, bindingBuilder: params.bindingBuilder, sampleParams: params.sampleParams]
@@ -144,12 +144,12 @@ class ReportController {
 			throw new NotFoundException(params.id, Report)
 		}
 		try {
-		   reportInstance.delete() 
+		   reportInstance.delete()
 		} catch( DataIntegrityViolationException e) {
 			throw new DeleteException(reportInstance, e)
 		}
-		
-		render(status: '200', contentType: "text/json") { ["message": g.message(code: 'default.delete.message')] }   
+
+		render(status: '200', contentType: "text/json") { ["message": g.message(code: 'default.delete.message')] }
 	}
 
 
@@ -160,14 +160,14 @@ class ReportController {
 		}
 
 		def binding = reportInstance.evalBinding(params)
-		reportService.renderReport(reportInstance, binding, response, "${reportInstance.title}", true)
+		reportService.renderReport(reportInstance, binding, response, null, true)
 	}
 
 
 
     @SuppressWarnings("CatchThrowable")
     private Map eval(String code, Map bindingValues) {
-		
+
 		def map = [:]
 		def output = new StringBuilder()
 		def sysoutInterceptor = new SystemOutputInterceptor({ String s ->
@@ -189,7 +189,7 @@ class ReportController {
 		}
 
 		map.output = output.toString()
-		return map 
+		return map
 	}
 
 	private GroovyShell createShell(Map bindingValues) {
