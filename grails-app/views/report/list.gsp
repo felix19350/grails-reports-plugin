@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 	<head>
-		<meta name="layout" content="developerConsole">
+		<meta name="layout" content="reportLayout">
 		<g:set var="entityName" value="${message(code: 'report.label', default: 'Report')}" />
 		<title><g:message code="default.list.label" args="[entityName]" /></title>
 
@@ -20,8 +20,8 @@
 	<body>
 		<div id="reportListView" style="margin-top: 20px;">
 		<hr/>
-		<div class="row">
-			<div class="span12">
+		<div>
+			<div style="width: 95%; margin: auto">
 				<table class="table table-main table-striped table-bordered">
 					<thead>
 						<tr>
@@ -34,7 +34,7 @@
 					</tbody>
 				</table>
                 <div class="pull-right">
-                    <div class="btn" id="createReportBtn"><g:message code="ui.button.create"/></div>
+                    <div class="btn btn-primary" id="createReportBtn"><i class="icon-plus-sign icon-white"></i> <g:message code="ui.button.create"/></div>
                 </div>
 
             </div>

@@ -2,5 +2,5 @@
         <td>{{= id }}</td>
         <td>{{= name }}</td>
 		<td>{{= title }}</td>
-        <td style="text-align: center"><span class="btn download">Download</span></td>
+        <td style="text-align: center"><span class="btn download"><i class="icon-circle-arrow-down"></i> Download</span></td>
 </script>

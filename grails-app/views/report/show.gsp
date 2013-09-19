@@ -2,8 +2,8 @@
 <!doctype html>
 <html>
 	<head>
-		<meta name="layout" content="developerConsole">
-		<g:set var="entityName" value="${message(code: 'report.label', default: 'report')}" />
+		<meta name="layout" content="reportLayout">
+		<g:set var="entityName" value="${message(code: 'report.label', default: 'Report')}" />
 		<title><g:message code="default.edit.label" args="[entityName]" /></title>
 		
 		<r:require module="reportsStyle"/>
@@ -25,11 +25,7 @@
 				<div class="row default-margin-bottom">
 					<div class="span12">
 						<div class="pull-left">
-							<a class="btn" id="backBtn" href="${g.createLink(mapping:'reportsList')}"><g:message code="ui.button.back"/></a>
-						</div>
-						<div class="pull-left default-margin-left">
 							<div class="btn-group">
-								
 								<a class="btn" id="previewBtn">
 									<i class="icon-play"></i>
 									<g:message code="ui.button.preview"/>
