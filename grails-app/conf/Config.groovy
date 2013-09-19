@@ -92,7 +92,8 @@ log4j = {
           'grails.app.taglib',
           'grails.app.services',
           'grails.app.controllers',
-          'grails.app.domain'
+          'grails.app.domain',
+          'org.grails.plugins.reports.ReportUtils'
 
     error 'grails.app.taglib.org.grails.plugin.resource.ResourceTagLib'  
 

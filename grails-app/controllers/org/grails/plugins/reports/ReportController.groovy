@@ -91,7 +91,8 @@ class ReportController {
 
 
 	def save() {
-		def reportParams = [name: params.name, title: params.title, templateDocument: "", bindingBuilder: "[:]", sampleParams: "[:]"]
+        log.debug("Creating a new report #${params.name}")
+        def reportParams = [name: params.name, title: params.title]
 
 		def reportInstance = new Report(reportParams)
 		if (!reportInstance.save(flush: true)) {

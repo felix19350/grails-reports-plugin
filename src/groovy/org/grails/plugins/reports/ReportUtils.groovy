@@ -16,10 +16,11 @@ public class ReportUtils {
             String name = reportInfo.name
             String title = reportInfo.title
             Report report = Report.findByName(name)
+            log.debug("Checking report ${name}")
             if(report == null) {
-                String templateDocument = loadResourceContent(servletContext, "${name}.gsp")
-                String bindingBuilder = loadResourceContent(servletContext, "${name}.groovy", "[:]")
-                String sampleParams = loadResourceContent(servletContext, "${name}.params.groovy", "[:]")
+                String templateDocument = loadResourceContent(servletContext, "${name}.gsp", Report.DEFAULT_TEMPLATE_SOURCE)
+                String bindingBuilder = loadResourceContent(servletContext, "${name}.groovy", Report.DEFAULT_BINDING_BUILDER_SOURCE)
+                String sampleParams = loadResourceContent(servletContext, "${name}.params.groovy", Report.DEFAULT_SAMPLE_PARAMS_SOURCE)
 
                 report = new Report(
                         name: name,
@@ -36,7 +37,7 @@ public class ReportUtils {
 
     private static String loadResourceContent(ServletContext servletContext, String filename, String defaultText = "") {
         String filePath = "${REPORTS_FOLDER}/${filename}"
-        log.debug("loading report from ${filePath}")
+        log.debug("Loading source from ${filePath}")
         InputStream input = servletContext.getResourceAsStream(filePath)
         String content = input?.getText() ?: defaultText
         return content

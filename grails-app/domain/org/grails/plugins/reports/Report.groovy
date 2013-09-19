@@ -6,21 +6,34 @@ import org.apache.commons.lang.builder.HashCodeBuilder
 
 public class Report {
 
-	/** Unique name */
+    /** Unique name */
 	String name
 	/** Title */
 	String title
 	/** Sample params maps groovy code */
-	String sampleParams
+	String sampleParams = DEFAULT_SAMPLE_PARAMS_SOURCE
 	/** Grrovy code to build the bindling based on params */
-	String bindingBuilder
+	String bindingBuilder = DEFAULT_BINDING_BUILDER_SOURCE
 	/** GSP template code */
-	String templateDocument
+	String templateDocument = DEFAULT_TEMPLATE_SOURCE
 
 	Date dateCreated
 	Date lastUpdated
 
-	static mapping = {
+    public static final String DEFAULT_SAMPLE_PARAMS_SOURCE = "[:]"
+
+    public static final String DEFAULT_BINDING_BUILDER_SOURCE = "[:]"
+
+    public static final String DEFAULT_TEMPLATE_SOURCE = """
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<boby>
+<!-- body -->
+</body>
+</html>"""
+
+    static mapping = {
 		templateDocument type: 'text'
 		bindingBuilder type: 'text'
 	}

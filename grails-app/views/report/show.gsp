@@ -4,7 +4,7 @@
 	<head>
 		<meta name="layout" content="reportLayout">
 		<g:set var="entityName" value="${message(code: 'report.label', default: 'Report')}" />
-		<title><g:message code="default.edit.label" args="[entityName]" /></title>
+		<title><g:message code="default.edit.label" args="[entityName]" /> - ${reportInstance.name}</title>
 		
 		<r:require module="reportsStyle"/>
 		<r:require module="reportsCodemirror"/>
