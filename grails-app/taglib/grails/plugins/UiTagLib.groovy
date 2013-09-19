@@ -4,24 +4,6 @@ class UiTagLib {
 
     static namespace = "ui"
 
-    def grailsApplication
-
-    /**
-     * Generates the clinic/company logo
-     * */
-    def companyLogo = {
-        attrs, src ->
-            out << """
-		<div class="pull-left" style="margin-top: 6px;">
-		<img src="${g.resource(dir: 'images', file: grailsApplication.config.organizationLogo)}" alt="" style="height: 34px;" />
-		</div>
-		<div class="pull-left" style="font-size: 10px; margin-right: 20px; margin-top: 6px;">
-		<p style="color: #8870B1; border-bottom: 1px solid #999; margin: 0;">${grailsApplication.config.organizationName}</p>
-		<p class="bold uppercase" style="color: #999; margin: 0; font-size: 10px; text-align: center;">${grailsApplication.config.organizationalUnitName}</p>
-		</div>
-	  """
-    }
-
     /**
      * Creates a sortable column header that works with the Backbone routing scheme implemented.
      * Creates a TH element that contains a link with the an hash of the property to be sorted.
@@ -211,19 +193,6 @@ class UiTagLib {
               </div>"""
     }
 
-
-    def datePickerInline = { attrs, body ->
-        def name = attrs.name
-        def format = attrs.format ?: "yyyy-mm-dd"
-        def date = attrs.date ?: (new Date()).encodeAsDefaultDate()
-        def containerClass = attrs.containerClass ?: ""
-
-        out << """
-			<div id="${name}" name="${name}" class="date ${containerClass}" data-date-format="${format}" data-date="${date}"></div>
-		"""
-    }
-
-
     def datePicker = { attrs, body ->
         def name = attrs.name
         def format = attrs.format ?: "yyyy-mm-dd"
@@ -257,99 +226,6 @@ class UiTagLib {
 		"""
     }
 
-    def actionButtonFrame = { attrs, body ->
-        def canEdit = parseBoolean(attrs.canEdit)
-        def canDelete = parseBoolean(attrs.canDelete)
-
-        def toolbarContainerClass = attrs.toolbarContainerClass ?: "action-toolbar-container"
-        def toolbarClass = attrs.toolbarClass ?: "action-toolbar"
-        def contentClass = attrs.contentClass ?: "row"
-
-        def withSeparator = parseBoolean(attrs.withHr, true)
-
-
-        out << """<div class="${toolbarContainerClass} clearfix"> """
-
-
-        if (canEdit) {
-            out << """
-          <div class="display ${toolbarClass}">
-                <div class="pull-right"><span class="label edit-btn" style="margin-bottom: 5px;"><i class="icon-pencil"></i> ${message(code: 'ui.button.edit')}</span></div>
-          </div>
-          <div class="edit ${toolbarClass}">
-              <div class="pull-right"><span class="label label-success save-btn" style="margin-bottom: 5px;"><i class="icon-ok"></i> ${message(code: 'ui.button.save')}</span></div>
-          </div>
-      """
-        }
-
-        if (attrs.title) {
-            out << """
-      <div class="pull-left clearfix">
-        <h4 class="title">${attrs.title}</h4>
-      </div>
-      """
-        }
-
-        out << """</div>""" //End top clearfix
-
-        if (withSeparator) {
-            out << """<hr class="small-margin-top"/>"""
-        }
-
-
-        out << """<div class="cleared ${contentClass}">"""
-        out << body()
-        out << "</div>"
-
-        if (canEdit) {
-            out << """
-          <div class="edit bottom-action-toolbar small-margin-top small-margin-bottom">
-          <div class="row">
-            <div class="pull-right"><span class="label cancel-btn"><i class="icon-remove"></i> ${message(code: 'ui.button.cancel')}</span></div>"""
-
-            if (canDelete) {
-                def modalId = UUID.randomUUID().toString()
-                out << """<div class="pull-left">
-                    <span class="label label-important delete-btn" data-toggle="modal" data-target="#${modalId}"><i class="icon-trash"></i> ${message(code: 'ui.button.delete')}</span>
-                    <div class="modal hide fade" id="${modalId}">
-                    <div class="modal-header">
-                    <a href="#" class="close" data-dismiss="modal">&times;</a>
-                    <h3>${g.message(code: 'ui.label.deleteConfirm')}</h3>
-                    </div>
-                    <div class="modal-body">
-                    <p>${g.message(code: 'ui.label.deleteConfirmBody')}</p>
-                    </div>
-                    <div class="modal-footer">
-                    <a href="#" class="btn btn-danger delete-btn-confirm">${g.message(code: 'ui.button.delete')}</a>
-                    </div>
-                    </div>
-                  </div>"""
-            }
-
-            out << """</div>
-          </div>
-          """
-        }
-
-        //out << """</div>"""
-
-    }
-
-    def inlineRemoveBtn = { attrs, body ->
-        def buttonClass = attrs.btnClass ?: ""
-        out << """<div class="edit"><div class="${buttonClass} clickable" rel="tooltip" title="${g.message(code: 'ui.button.delete')}"> <i class="icon-minus-sign"></i></div></div>"""
-    }
-
-    def inlineEditBtn = { attrs, body ->
-        def buttonClass = attrs.btnClass ?: ""
-        out << """<div class="edit"><div class="${buttonClass} clickable" rel="tooltip" title="${g.message(code: 'ui.button.edit')}"> <i class="icon-ok-sign"></i></div></div>"""
-    }
-
-    def inlineCancelBtn = { attrs, body ->
-        def buttonClass = attrs.btnClass ?: ""
-        out << """<div class="edit"><div class="${buttonClass} clickable" rel="tooltip" title="${g.message(code: 'ui.button.cancel')}"> <i class="icon-remove"></i></div></div>"""
-    }
-
     private boolean parseBoolean(attr, nullValue = false) {
         boolean result = nullValue
         if (attr == null) {
@@ -366,54 +242,5 @@ class UiTagLib {
 
         return result
     }
-
-    def entityTitle = { attrs, body ->
-        def divClass = attrs.divClass ?: "span8"
-        out << """
-      <div class="pull-left">
-        <div class="${divClass}">
-        """
-
-        if (attrs.icon) {
-            out << """
-        <img src="${attrs.icon}" alt=""/>
-      """
-        }
-
-        out << """
-          <h3 class="title inline">${attrs.message}</h3>
-        </div>
-      </div>
-    """
-    }
-
-    def secondLevelTitle = { attrs, body ->
-        if (!attrs.steps) {
-            throwTagError "The tag [secondLevelTitle] is missing the property [steps]. This property should be an array with the following strcuture: [ [name, link], [name2, link2] ...]"
-        }
-
-        out << """<div class="pull-left">"""
-
-        attrs?.steps?.eachWithIndex { step, idx ->
-            if (idx == 0) {
-                out << """<h3 class="inline default-margin-right">${step[0]}</h3>"""
-            } else {
-                out << """<h6 class="inline default-margin-right">${step[0]}</h6>"""
-            }
-
-        }
-
-        out << """</div>"""
-    }
-
-    def toggleEditBtn = { attrs, body ->
-        def buttonClass = attrs.btnClass ?: ""
-        out << """
-      <div class="display ${buttonClass} clickable" rel="tooltip" title="${g.message(code: 'ui.button.edit')}">
-      <i class="icon-pencil"></i>
-      </div>
-    """
-    }
-
 
 }
