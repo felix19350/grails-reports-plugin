@@ -120,4 +120,9 @@ grails.views.gsp.encoding="UTF-8"
 grails.serverURL = "http://localhost:8080/${appName}"
 
 
+/**
+ * Docs
+ **/
+
+grails.doc.authors="Bruno Félix, Hugo Monteiro, Nuno Luís"
 
