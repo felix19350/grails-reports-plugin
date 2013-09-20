@@ -46,14 +46,15 @@ class ReportService {
     static transactional = true
 
     /**
-     * Renders the report to one http response that can be to see in browser (isInline = true) or to download (isInline = false)
-     * the filename will be report.title + ' - ' + filesubname + '.pdf'
+     * Renders the report, as pdf, to one http response.
+     * The pdf can be seen in browser (isInline = true) or to download (isInline = false)
+     * The filename will be: report.title + ' - ' + filesubname + '.pdf'
      *
-     * @param name
-     * @param binding
-     * @param response
-     * @param filesubname
-     * @param isInline
+     * @param name of the report
+     * @param binding map to pass to template
+     * @param response is the http response to write
+     * @param filesubname is additional name for the file name
+     * @param isInline true will write http headers to see the pdf in browser, false will write headers to download the pdf
      *
      */
     public void renderReport(String name, Map binding, HttpServletResponse response, String filesubname = null, boolean isInline = true) {
@@ -69,9 +70,8 @@ class ReportService {
 
     /**
      * Renders the report and returns the PDF bytes
-     * @param name
-     * @param binding
-     *
+     * @param name of the report
+     * @param binding map to pass to template
      */
     public byte[] renderReport(String name, Map binding) {
         log.debug("Render report '${name}'")
@@ -90,8 +90,11 @@ class ReportService {
         return out.toByteArray()
     }
 
-    // gets template source and filename
-    public void renderReport(Report reportInstance, Map binding, HttpServletResponse response, String filesubname, boolean isInline) {
+    /**
+     * Renders an report instance, as pdf, to one http response.
+     */
+    public void renderReport(Report reportInstance, Map binding, HttpServletResponse response, String filesubname = null, boolean isInline = false) {
+        log.debug("Render report '${name}' to http response")
         def templateDocument = reportInstance.templateDocument
         def filename = reportInstance.title
 
@@ -103,7 +106,9 @@ class ReportService {
         renderReportTemplate(templateDocument, binding, response, filename, isInline)
     }
 
-    // write content disposition
+    /**
+     * Renders an xhtml report, as pdf, to one http response.
+     */
     private void renderReportTemplate(String templateDocument, Map binding, HttpServletResponse response, String filename, boolean isInline) {
         log.debug("renderReportTemplate: ${filename}")
         def contentDisposition = isInline ? "inline" : "attachment"
