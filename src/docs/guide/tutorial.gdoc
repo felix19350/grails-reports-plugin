@@ -203,3 +203,9 @@ grails run-app
 {code}
 
 Access the url @http://localhost:8080/tutorial-reports/index/download@ to download the report you just created.
+
+h2. Editing the report at Runtime
+
+
+The reports can be changed at @http://localhost:8080/tutorial-reports/reports@ in runtime. When you click @save@ the
+template/binding/params are saved in the database, so it is better to save those files locally in the @web-app/reports@ folder.
