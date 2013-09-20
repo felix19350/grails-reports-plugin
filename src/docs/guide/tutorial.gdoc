@@ -152,20 +152,54 @@ You can add external css or image files, but don't forget to add the @relative: 
 ...
 <h1>List of users</h1>
 
-
 <table>
-<g:each in="users" var="user">
-    <td>${user.name}</td>
-    <td>${user.address}</td>
-    <td>${user.city}</td>
-</g:each>
-</table>
+    <g:each in="${users}" var="user">
+        <tr>
+            <td>${user.name}</td>
+            <td>${user.address}</td>
+            <td>${user.city}</td>
+        </tr>
+    </g:each>
 
-</body>
-</html>
+</table>
 {code}
 
 
+h2. Run the application
+
+{code}
+grails run-app
+{code}
+
+The report created is available at @http://localhost:8080/tutorial-reports/reports/@
 
 
+h2. Create a controller
+The next task is to create a page with a download button.
 
+First, create a controller named @Index@
+
+{code}
+grails create-controller Index
+{code}
+
+
+Now in the @download()@ method return the file to the user
+
+{code}
+    ...
+    def reportService // from the reports plugin
+    def index() {
+        Report reportInstance = Report.get("usersReport")
+        def binding = reportInstance.evalBinding() // the binding and params file will be used
+        reportService.renderReport(reportInstance, binding, response, null, false)
+    }
+{code}
+
+
+h2. Run the application to download the new report
+{code}
+grails run-app
+{code}
+
+Access the url @http://localhost:8080/tutorial-reports/index/download@ to download the report you just created.

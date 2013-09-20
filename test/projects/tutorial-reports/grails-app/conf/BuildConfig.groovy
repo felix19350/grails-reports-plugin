@@ -60,6 +60,6 @@ grails.project.dependency.resolution = {
 
         compile ':cache:1.0.1'
 
-        compile("org.grails.plugins:reports:0.3.4")
+        compile("org.grails.plugins:reports:latest.release")
     }
 }

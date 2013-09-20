@@ -2,6 +2,8 @@ h1. Introduction to the reports plugin
 The reports plugin simplifies the way reports are generated in an application, giving the possibility
 to change them at runtime.
 
+The reports are generated in PDF only.
+
 h1. Instalation
 
 h3. Using Git to download the last version
@@ -12,15 +14,12 @@ cd grails-reports-plugin
 grails maven-install
 {code}
 
-h3. Add the plugin inside your app
+h3. Add the plugin
 
-Add mavenLocal() to the list of repositories in BuildConfig.groovy
-Add compile("org.grails.plugins:reports:0.3.2") to the plugin list where 0.1 is the current version of the plugin
-
-
+* Add mavenLocal() to the list of repositories in BuildConfig.groovy
+* Add @compile("org.grails.plugins:reports:latest.release")@ to the plugin list
 
 h1. Issues & Ideas
-If you have some issues or ideas just post in the github repository!
+If you have bug reports or ideas just post in the github repository!
 
-h1. Screenshot
-[http://picpaste.com/pics/grails-reports-plugin.1379354967.png|http://picpaste.com/pics/grails-reports-plugin.1379354967.png]
+h1. [Screenshot|http://postimg.org/image/um4qjgdav/]

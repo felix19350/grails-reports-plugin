@@ -12,7 +12,7 @@ class BootStrap {
     private void initReports(def servletContext) {
         log.debug ("init reports")
         def reports = [
-            [name: "UserReport", title: "List of Users"]
+            [name: "usersReport", title: "List of Users"]
         ]
         
         ReportUtils.updateReportsFromResources(servletContext, reports)

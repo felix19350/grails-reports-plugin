@@ -6,6 +6,9 @@ import org.apache.commons.lang.builder.HashCodeBuilder
 
 public class Report {
 
+
+    def grailsApplication
+
     /** Unique name */
 	String name
 	/** Title */
@@ -93,7 +96,7 @@ public class Report {
 	}
 
 	Map evalSampleParams() {
-		GroovyShell shell = new GroovyShell()
+		GroovyShell shell = new GroovyShell(grailsApplication.classLoader)
 		def result = shell.evaluate(this.sampleParams)
 		shell = null
 		return result
@@ -105,7 +108,7 @@ public class Report {
 	}
 
 	Map evalBinding(Map params) {
-		GroovyShell shell = new GroovyShell()
+        GroovyShell shell = new GroovyShell(grailsApplication.classLoader)
 		shell.setVariable("params", params)
 		def result = shell.evaluate(this.bindingBuilder)
 		shell = null
