@@ -1,0 +1,5 @@
+DefaultPackage
+grails.plugins
+org.grails.plugins.reports
+org.grails.plugins.services
+pt.whiteroad

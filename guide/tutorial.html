@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>2 Tutorial 0.3.5</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen, print" title="Style" charset="utf-8"/>
+    <link rel="stylesheet" href="../css/pdf.css" type="text/css" media="print" title="PDF" charset="utf-8"/>
+    <script type="text/javascript">
+function addJsClass() {
+    var classes = document.body.className.split(" ");
+    classes.push("js");
+    document.body.className = classes.join(" ");
+}
+    </script>
+</head>
+
+<body class="body" onload="addJsClass();">
+<div id="navigation">
+    <ul>
+        <li>
+            <div id="nav-summary" onmouseover="toggleNavSummary(false)" onmouseout="toggleNavSummary(true)">
+                <a href="../guide/index.html" class="button">Table of contents</a>
+
+                <div id="nav-summary-childs" style="display:none;">
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/introduction.html"><strong>1</strong><span>Introduction</span></a>
+                    </div>
+                    
+                    <div class="toc-item" style="margin-left:0"><a href="../guide/tutorial.html"><strong>2</strong><span>Tutorial</span></a>
+                    </div>
+                    
+                </div>
+            </div>
+        </li>
+        <li class="separator selected">
+            <a id="ref-button" onclick="localToggle(); return false;" href="#">Quick Reference</a>
+        </li>
+    </ul>
+</div>
+<div id="header">
+    <div class="images clearfix">
+        
+        
+    </div>
+    <p>Tool to generate reports using a template.</p>
+</div>
+
+
+<table id="colset" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+        <td id="col1">
+            <div id="main" class="corner-all">
+
+                
+                    <div class="toc-item prev-left"><a href="../guide/introduction.html">&lt;&lt; <strong>1</strong><span>Introduction</span></a></div>
+                
+
+                <span id='toggle-col1' class="toggle">(<a href="#" onclick="localToggle(); return false;">Quick Reference</a>)</span>
+
+                
+
+
+                <div class="project">
+                    <h1>2 Tutorial - Reference Documentation</h1>
+
+                    <p><strong>Authors:</strong> Bruno Félix</p>
+
+                    <p><strong>Version:</strong> 0.3.5</p>
+
+                    
+                </div>
+
+                
+
+                
+
+<h1 id="tutorial">2 Tutorial</h1>
+<h1>Reports Tutorial</h1><p class="paragraph"/>This tutorial shows how to create a report using the plugin.<p class="paragraph"/>
+The sample application that uses the plugin is under <div class="code"><pre>test/projects/tutorial&#45;reports</pre></div><p class="paragraph"/>The goal of the tutorial is to generate a simple report with database records, in this case will be a list of users.<p class="paragraph"/><h2>Create grails-app</h2><p class="paragraph"/><div class="code"><pre>grails create&#45;app tutorial&#45;reports</pre></div><p class="paragraph"/><h2>Add the plugin to BuildConfig.groovy to the plugins list</h2><p class="paragraph"/>The plugin is not in the grails repositories yet, so a grails maven-install is needed. (See @instalation)<p class="paragraph"/><div class="code"><pre>plugins &#123;
+        runtime &#34;:hibernate:$grailsVersion&#34;
+        runtime &#34;:jquery:1.8.3&#34;
+        runtime &#34;:resources:1.2&#34;<p class="paragraph"/>        build &#34;:tomcat:$grailsVersion&#34;<p class="paragraph"/>        runtime &#34;:database&#45;migration:1.3.2&#34;<p class="paragraph"/>        compile &#39;:cache:1.0.1&#39;<p class="paragraph"/>        compile(&#34;org.grails.plugins:reports:0.3.2&#34;)
+    &#125;</pre></div><p class="paragraph"/>
+<h2>Config.groovy</h2><p class="paragraph"/>Add the url of your server:
+<div class="code"><pre>grails.serverURL = <span class="java&#45;quote">"http://localhost:8080/$&#123;appName&#125;"</span></pre></div><p class="paragraph"/>The <code>grails.serverURL</code> will later be used to go to the plugin reports user interface.<p class="paragraph"/>
+<h2>BootStrap.groovy</h2><p class="paragraph"/>The next step is to add the report processing to the start of the application,
+so when we restart the application, the new reports created will be copied to the database.<p class="paragraph"/>When the application is started the plugin will search for the <code>web-app/reports/</code> folder.<p class="paragraph"/><div class="code"><pre><span class="java&#45;keyword">import</span> org.grails.plugins.reports.ReportUtils<p class="paragraph"/>class BootStrap &#123;
+    def grailsApplication<p class="paragraph"/>    def init = &#123; servletContext &#45;&#62;
+        initReports(servletContext)
+    &#125;<p class="paragraph"/>    <span class="java&#45;keyword">private</span> void initReports(def servletContext) &#123;
+        log.debug (<span class="java&#45;quote">"init reports"</span>)
+        def reports = &#91;
+            &#91;name: <span class="java&#45;quote">"usersReport"</span>, title: <span class="java&#45;quote">"List of Users"</span>&#93;
+        &#93;<p class="paragraph"/>        ReportUtils.updateReportsFromResources(servletContext, reports)
+    &#125;<p class="paragraph"/>
+    def destroy = &#123;
+        // nothing to destroy
+    &#125;
+&#125;</pre></div><p class="paragraph"/>
+<h2>Sample domain</h2><p class="paragraph"/>Since this tutorial's goal is to create a report with a list of users, we have to create the <code></code>User<code></code> domain with the command:<p class="paragraph"/><div class="code"><pre>grails create&#45;domain&#45;class User</pre></div><p class="paragraph"/>Now add fields to the domain (just a sample):<p class="paragraph"/><div class="code"><pre><span class="java&#45;keyword">package</span> tutorial.reports<p class="paragraph"/>class User &#123;<p class="paragraph"/>    <span class="java&#45;keyword">static</span> constraints = &#123;
+        name nullable: <span class="java&#45;keyword">false</span>
+    &#125;<p class="paragraph"/>    <span class="java&#45;object">String</span> name
+    <span class="java&#45;object">String</span> address<p class="paragraph"/>    <span class="java&#45;object">String</span> city<p class="paragraph"/>&#125;</pre></div><p class="paragraph"/>
+<h2>Add test data (too BootStrap.groovy)</h2><p class="paragraph"/><div class="code"><pre>def init = &#123; servletContext &#45;&#62;
+    &#8230;
+    initUsers()
+&#125;<p class="paragraph"/><span class="java&#45;keyword">private</span> void initUsers() &#123;
+    log.debug(<span class="java&#45;quote">"creating users"</span>)<p class="paragraph"/>    User u1 = <span class="java&#45;keyword">new</span> User(name: <span class="java&#45;quote">"Hugo Monteiro"</span>, address: <span class="java&#45;quote">"Street 33"</span>, city: <span class="java&#45;quote">"Sintra"</span>)
+    User u2 = <span class="java&#45;keyword">new</span> User(name: <span class="java&#45;quote">"Bruno Félix"</span>, address: <span class="java&#45;quote">"Street 6"</span>, city: <span class="java&#45;quote">"Almada"</span>)
+    User u3 = <span class="java&#45;keyword">new</span> User(name: <span class="java&#45;quote">"Nuno Luís"</span>, address: <span class="java&#45;quote">"Street 1"</span>, city: <span class="java&#45;quote">"Porto"</span>)<p class="paragraph"/>    u1.save()
+    u2.save()
+    u3.save()
+&#125;</pre></div><p class="paragraph"/>
+<h2>Create the report files</h2><p class="paragraph"/>Since the name of the report is <code>userReport</code> the name of the template will be <code>usersReport.groovy</code> and the binding
+will be <code>usersReport.groovy</code>. You can create an extra file called <code>userReport.params.groovy</code> - this file passes arguments
+to the binding: id of a user for instance.<p class="paragraph"/>The binding is a simple way to inject values to your report, just to see if the data is there and in the right place.<p class="paragraph"/>Edit <code>usersReport.groovy</code> to get a list of users and pass it to the report:
+<div class="code"><pre><span class="java&#45;keyword">import</span> tutorial.reports.User
+List&#60;User&#62; users = User.list()<p class="paragraph"/>&#91;users: users&#93;</pre></div><p class="paragraph"/>
+Edit <code>usersReport.gsp</code> to show the list of users. This html will be converted to PDF.
+You can add external css or image files, but don't forget to add the <code>relative: true</code> parameter.<p class="paragraph"/><div class="code"><pre>&#8230;
+&#60;h1&#62;List of users&#60;/h1&#62;<p class="paragraph"/>&#60;table&#62;
+    &#60;g:each in=<span class="java&#45;quote">"$&#123;users&#125;"</span> <span class="java&#45;keyword">var</span>=<span class="java&#45;quote">"user"</span>&#62;
+        &#60;tr&#62;
+            &#60;td&#62;$&#123;user.name&#125;&#60;/td&#62;
+            &#60;td&#62;$&#123;user.address&#125;&#60;/td&#62;
+            &#60;td&#62;$&#123;user.city&#125;&#60;/td&#62;
+        &#60;/tr&#62;
+    &#60;/g:each&#62;<p class="paragraph"/>&#60;/table&#62;</pre></div><p class="paragraph"/>
+<h2>Run the application</h2><p class="paragraph"/><div class="code"><pre>grails run&#45;app</pre></div><p class="paragraph"/>The report created is available at <code>http://localhost:8080/tutorial-reports/reports/</code><p class="paragraph"/>
+<h2>Create a controller</h2>
+The next task is to create a page with a download button.<p class="paragraph"/>First, create a controller named <code>Index</code><p class="paragraph"/><div class="code"><pre>grails create&#45;controller Index</pre></div><p class="paragraph"/>
+Now in the <code>download()</code> method return the file to the user<p class="paragraph"/><div class="code"><pre>&#8230;
+    def reportService // from the reports plugin
+    def index() &#123;
+        Report reportInstance = Report.get(<span class="java&#45;quote">"usersReport"</span>)
+        def binding = reportInstance.evalBinding() // the binding and params file will be used
+        reportService.renderReport(reportInstance, binding, response, <span class="java&#45;keyword">null</span>, <span class="java&#45;keyword">false</span>)
+    &#125;</pre></div><p class="paragraph"/>
+<h2>Run the application to download the new report</h2>
+<div class="code"><pre>grails run&#45;app</pre></div><p class="paragraph"/>Access the url <code>http://localhost:8080/tutorial-reports/index/download</code> to download the report you just created.<p class="paragraph"/><h2>Editing the report at Runtime</h2><p class="paragraph"/>
+The reports can be changed at <code>http://localhost:8080/tutorial-reports/reports</code> in runtime. When you click <code>save</code> the
+template/binding/params are saved in the database, so it is better to save those files locally in the <code>web-app/reports</code> folder.
+
+
+
+                <div style="clear:both;margin-top:15px;"></div>
+                
+                    <div class="toc-item prev-left"><a href="../guide/introduction.html">&lt;&lt; <strong>1</strong><span>Introduction</span></a></div>
+                
+                <div style="clear:both"></div>
+            </div>
+        </td>
+        <td id="col2">
+            <div class="local clearfix">
+                <div class="local-title">
+                    <a href="../guide/index.html" target="mainFrame">Quick Reference</a>
+                    <span class="toggle">(<a href="#" onclick="localToggle(); return false;">hide</a>)</span>
+                </div>
+                <div class="menu">
+                    
+                    <div class="menu-block"><h1 class="menu-title" onclick="toggleRef(this.parentNode.childNodes[1])">Items</h1><div class="menu-sub">
+                        
+                            
+                            <div class="menu-item"><a href="../ref/Items/reference.html">reference</a>
+                            </div>
+                            
+                            </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<div id="footer">
+    
+    
+</div>
+
+<script type="text/javascript" src="../js/docs.js"></script>
+
+</body>
+</html>
