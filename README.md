@@ -1,3 +1,5 @@
 Grails Reports Plugin
 
-Check the docs @: https://github.com/felix19350/grails-reports-plugin/wiki
+The documentation is at src/docs/guide (just run grails doc to generate the html)
+The tutorial app is at tests/projects/tutorial-reports
+
