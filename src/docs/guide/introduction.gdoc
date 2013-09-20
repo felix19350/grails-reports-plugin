@@ -1,13 +1,18 @@
-This is an example documentation template. The syntax format is similar to "Textile":http://textile.thresholdstate.com/.
+h1. Instalation
 
-You can apply formatting such as *bold*, _italic_ and @code@. Bullets are possible too:
+# git clone https://github.com/felix19350/grails-reports-plugin.git
+# cd grails-reports-plugin
+# grails maven-install _(this will install the plugin inside the maven local repository)_
+# Add mavenLocal() to the list of repositories in BuildConfig.groovy
+# Add compile("org.grails.plugins:reports:0.1") to the plugin list where 0.1 is the current version of the plugin
 
-* Bullet 1
-* Bullet 2
+h1. How to quick start the plugin?
+The plugin can also work like a grails application. You can just go to the grails-reports-plugin folder and do grails run-app.
 
-As well as numbered lists:
+We are making constant changes to the plugin to have a better version to send to the grails official plugin repositories.
 
-# Number 1
-# Number 2
+h1. Issues & Ideas
+If you have some issues or ideas just post in the github repository!
 
-The documentation also handles links to [guide items|guide:introduction] as well as [reference|items]
+h1. Screenshot
+[http://picpaste.com/pics/grails-reports-plugin.1379354967.png|http://picpaste.com/pics/grails-reports-plugin.1379354967.png]
