@@ -1,7 +1,7 @@
 class ReportsGrailsPlugin {
     def groupId = "org.grails.plugins"
     // the plugin version
-    def version = "0.3.2"
+    def version = "0.3.4"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.2 > *"
     // resources that are excluded from plugin packaging
