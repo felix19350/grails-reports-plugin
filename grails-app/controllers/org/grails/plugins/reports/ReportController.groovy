@@ -2,8 +2,8 @@ package org.grails.plugins.reports
 
 import grails.converters.JSON
 import grails.util.GrailsUtil
-
 import groovy.ui.SystemOutputInterceptor
+
 import org.springframework.dao.DataIntegrityViolationException
 
 class ReportController {
@@ -19,14 +19,13 @@ class ReportController {
 
 	def list() {
 		def jsonResults = Report.list().collect{ it.encodeAsJson() }
-		render(view:"list", model:[reports: jsonResults])
+		[reports: jsonResults]
 	}
 
-
 	/**
-	* Sets the session variables used on the preview. returns the output of the evaluation of the
-	* bindings.
-	*/
+	 * Sets the session variables used on the preview. returns the output of the evaluation of the
+	 * bindings.
+	 */
 	def setPreviewParams(){
 		log.debug("Setting preview params: ${params.id}")
 
@@ -88,8 +87,6 @@ class ReportController {
 		reportService.renderReport(reportInstance, binding, response, null, false)
     }
 
-
-
 	def save() {
         log.debug("Creating a new report #${params.name}")
         def reportParams = [name: params.name, title: params.title]
@@ -103,7 +100,6 @@ class ReportController {
 		render json as JSON
 	}
 
-
 	def show() {
 		def reportInstance = Report.get(params.long('id'))
 		if (!reportInstance) {
@@ -114,7 +110,6 @@ class ReportController {
 		session.removeAttribute("report")
 		[reportInstance: reportInstance, canView: true, canEdit: true]
 	}
-
 
 	def update() {
 		log.debug("Go to update report #${params.id}")
@@ -137,7 +132,6 @@ class ReportController {
 		render json as JSON
 	}
 
-
 	def delete(){
 		log.debug("Go to delete report #${params.id}")
 		def reportInstance = Report.get(params.long('id'))
@@ -153,7 +147,6 @@ class ReportController {
 		render(status: '200', contentType: "text/json") { ["message": g.message(code: 'default.delete.message')] }
 	}
 
-
 	def renderReport() {
 		def reportInstance = Report.get(params.long('id'))
 		if (!reportInstance) {
@@ -163,8 +156,6 @@ class ReportController {
 		def binding = reportInstance.evalBinding(params)
 		reportService.renderReport(reportInstance, binding, response, null, true)
 	}
-
-
 
     @SuppressWarnings("CatchThrowable")
     private Map eval(String code, Map bindingValues) {
@@ -186,7 +177,7 @@ class ReportController {
 
 			map.exception = sw.toString()
 		} finally {
-			sysoutInterceptor.stop();
+			sysoutInterceptor.stop()
 		}
 
 		map.output = output.toString()
@@ -199,6 +190,4 @@ class ReportController {
 		bindingValues.config = grailsApplication.config
 		new GroovyShell(grailsApplication.classLoader, new Binding(bindingValues))
 	}
-
-
 }
