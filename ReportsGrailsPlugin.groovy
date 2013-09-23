@@ -1,7 +1,7 @@
 class ReportsGrailsPlugin {
     def groupId = "org.grails.plugins"
     // the plugin version
-    def version = "0.3.5"
+    def version = "0.3.6"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.2 > *"
     // resources that are excluded from plugin packaging
@@ -12,7 +12,7 @@ class ReportsGrailsPlugin {
     def title = "Grails Reports Plugin" // Headline display name of the plugin
     def author = "Bruno Félix"
     def authorEmail = "felix19350@gmail.com"
-    def description = '''Tool to generate reports using a template.'''
+    def description = '''Tool to generate reports using a template in HTML. It has a UI tool to edit the template at runtime.'''
 
     // URL to the plugin's documentation
     def documentation = "https://github.com/felix19350/grails-reports-plugin"

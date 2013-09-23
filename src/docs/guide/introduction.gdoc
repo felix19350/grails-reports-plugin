@@ -4,7 +4,17 @@ to change them at runtime.
 
 The reports are generated in PDF only.
 
-h1. Instalation
+h1. Instalation using the grails plugins official repository
+BuildConfig.groovy:
+
+{code}
+    compile(\":reports:0.3.6\")
+{code}
+
+h1. Instalation using git
+
+You can use this option if you want always the version from the repository with the
+last changes.
 
 h3. Using Git to download the last version
 
