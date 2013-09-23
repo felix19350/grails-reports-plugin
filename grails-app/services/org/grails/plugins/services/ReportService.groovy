@@ -7,7 +7,7 @@ import groovy.text.Template
 import org.codehaus.groovy.control.CompilationFailedException
 import org.codehaus.groovy.control.CompilerConfiguration
 import org.codehaus.groovy.grails.compiler.web.pages.GroovyPageClassLoader
-import org.codehaus.groovy.grails.exceptions.DefaultErrorsPrinter
+import org.codehaus.groovy.grails.exceptions.DefaultStackTracePrinter
 import org.codehaus.groovy.grails.web.errors.GrailsExceptionResolver
 import org.codehaus.groovy.grails.web.pages.GroovyPageMetaInfo
 import org.codehaus.groovy.grails.web.pages.GroovyPageParser
@@ -15,7 +15,7 @@ import org.codehaus.groovy.grails.web.pages.GroovyPageTemplate
 import org.codehaus.groovy.grails.web.pages.GroovyPagesMetaUtils
 import org.codehaus.groovy.grails.web.pages.exceptions.GroovyPagesException
 import org.codehaus.groovy.grails.web.servlet.WrappedResponseHolder
-import org.codehaus.groovy.runtime.IOGroovyMethods
+import org.codehaus.groovy.runtime.DefaultGroovyMethods
 import org.grails.plugins.reports.Report
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
@@ -287,7 +287,7 @@ class ReportService {
         // Compile the script into an object
         Class<?> scriptClass;
         try {
-            String groovySource = IOGroovyMethods.getText(ins, GroovyPageParser.GROOVY_SOURCE_CHAR_ENCODING);
+            String groovySource = DefaultGroovyMethods.getText(ins, GroovyPageParser.GROOVY_SOURCE_CHAR_ENCODING);
             //System.out.println(groovySource);
             //log.debug("classes loaded ${groovyClassLoader.getLoadedClasses().size()}")
             scriptClass = groovyClassLoader.parseClass(groovySource, name);
@@ -302,11 +302,11 @@ class ReportService {
             if (lineNumber > 0 && lineNumber < lineMappings.length) {
                 lineNumber = lineMappings[lineNumber - 1];
             }
-            String relativePageName = DefaultErrorsPrinter.makeRelativeIfPossible(pageName);
+            String relativePageName = DefaultStackTracePrinter.makeRelativeIfPossible(pageName);
             throw new GroovyPagesException("Could not parse script [" + relativePageName + "]: " + e.getMessage(), e, lineNumber, pageName);
         }
         catch (IOException e) {
-            String relativePageName = DefaultErrorsPrinter.makeRelativeIfPossible(pageName);
+            String relativePageName = DefaultStackTracePrinter.makeRelativeIfPossible(pageName);
             throw new GroovyPagesException("IO exception parsing script [" + relativePageName + "]: " + e.getMessage(), e);
         }
         GroovyPagesMetaUtils.registerMethodMissingForGSP(scriptClass, gspTagLibraryLookup);
