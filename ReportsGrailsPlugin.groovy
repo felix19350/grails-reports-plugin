@@ -16,6 +16,7 @@ class ReportsGrailsPlugin {
 
     // URL to the plugin's documentation
     def documentation = "http://felix19350.github.io/grails-reports-plugin/"
+    def issueManagement = [system: 'GitHub', url: 'https://github.com/felix19350/grails-reports-plugin/issues']
 
     // Details of company behind the plugin (if there is one)
     // def organization = [ name: "My Company", url: "http://www.my-company.com/" ]
