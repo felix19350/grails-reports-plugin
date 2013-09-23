@@ -1,13 +1,17 @@
 package org.grails.plugins.services
 
-import org.grails.plugins.reports.NotFoundException
-import grails.util.GrailsUtil
+import grails.util.Environment
 import grails.util.GrailsWebUtil
 import groovy.text.Template
+
+import java.util.concurrent.ConcurrentHashMap
+
+import javax.servlet.http.HttpServletResponse
+
 import org.codehaus.groovy.control.CompilationFailedException
 import org.codehaus.groovy.control.CompilerConfiguration
 import org.codehaus.groovy.grails.compiler.web.pages.GroovyPageClassLoader
-import org.codehaus.groovy.grails.exceptions.DefaultErrorsPrinter
+import org.codehaus.groovy.grails.exceptions.DefaultStackTracePrinter
 import org.codehaus.groovy.grails.web.errors.GrailsExceptionResolver
 import org.codehaus.groovy.grails.web.pages.GroovyPageMetaInfo
 import org.codehaus.groovy.grails.web.pages.GroovyPageParser
@@ -15,7 +19,8 @@ import org.codehaus.groovy.grails.web.pages.GroovyPageTemplate
 import org.codehaus.groovy.grails.web.pages.GroovyPagesMetaUtils
 import org.codehaus.groovy.grails.web.pages.exceptions.GroovyPagesException
 import org.codehaus.groovy.grails.web.servlet.WrappedResponseHolder
-import org.codehaus.groovy.runtime.IOGroovyMethods
+import org.codehaus.groovy.runtime.DefaultGroovyMethods
+import org.grails.plugins.reports.NotFoundException
 import org.grails.plugins.reports.Report
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
@@ -26,9 +31,6 @@ import org.w3c.dom.Document
 import org.xhtmlrenderer.resource.XMLResource
 import org.xml.sax.InputSource
 
-import javax.servlet.http.HttpServletResponse
-import java.util.concurrent.ConcurrentHashMap
-
 class ReportService {
 
     def pdfRenderingService
@@ -38,12 +40,10 @@ class ReportService {
     def gspTagLibraryLookup
     def myClassLoader
 
-    private Map<String, GroovyPageMetaInfo> pageCache = new ConcurrentHashMap<String, GroovyPageMetaInfo>();
+    private Map<String, GroovyPageMetaInfo> pageCache = new ConcurrentHashMap<String, GroovyPageMetaInfo>()
 
     boolean useCache = true
     boolean cleanClassLoaderCache = false
-
-    static transactional = true
 
     /**
      * Renders the report, as pdf, to one http response.
@@ -57,7 +57,7 @@ class ReportService {
      * @param isInline true will write http headers to see the pdf in browser, false will write headers to download the pdf
      *
      */
-    public void renderReport(String name, Map binding, HttpServletResponse response, String filesubname = null, boolean isInline = true) {
+    void renderReport(String name, Map binding, HttpServletResponse response, String filesubname = null, boolean isInline = true) {
         log.debug("Render report '${name}' to http response")
         def reportInstance = Report.findByName(name)
 
@@ -73,7 +73,7 @@ class ReportService {
      * @param name of the report
      * @param binding map to pass to template
      */
-    public byte[] renderReport(String name, Map binding) {
+    byte[] renderReport(String name, Map binding) {
         log.debug("Render report '${name}'")
         def reportInstance = Report.findByName(name)
 
@@ -93,7 +93,7 @@ class ReportService {
     /**
      * Renders an report instance, as pdf, to one http response.
      */
-    public void renderReport(Report reportInstance, Map binding, HttpServletResponse response, String filesubname = null, boolean isInline = false) {
+    void renderReport(Report reportInstance, Map binding, HttpServletResponse response, String filesubname = null, boolean isInline = false) {
         log.debug("Render report '${name}' to http response")
         def templateDocument = reportInstance.templateDocument
         def filename = reportInstance.title
@@ -169,8 +169,6 @@ class ReportService {
         RequestContextHolder.setRequestAttributes(originalRequestAttributes) // null ok
         WrappedResponseHolder.wrappedResponse = originalRequestAttributes?.currentResponse
 
-
-
         return xhtmlWriter.toString()
     }
 
@@ -184,155 +182,144 @@ class ReportService {
 
             if (metaInfo != null) {
                 log.debug("Gsp page in cache [${pageName}]")
-                return new GroovyPageTemplate(metaInfo);
-            } else {
-                log.debug("Gsp page not in cache [${pageName}]")
-                return createTemplate(new ByteArrayResource(txt.getBytes("UTF-8"), pageName), pageName);
+                return new GroovyPageTemplate(metaInfo)
             }
 
-        } else {
-
-            return createTemplate(new ByteArrayResource(txt.getBytes("UTF-8"), pageName), pageName);
-
+            log.debug("Gsp page not in cache [${pageName}]")
+            return createTemplate(new ByteArrayResource(txt.getBytes("UTF-8"), pageName), pageName)
         }
+
+        return createTemplate(new ByteArrayResource(txt.getBytes("UTF-8"), pageName), pageName)
     }
 
-    public void clearPageCache() {
-        pageCache.clear();
+    void clearPageCache() {
+        pageCache.clear()
     }
 
     private Template createTemplate(Resource resource, String pageName) throws IOException {
-        InputStream ins = resource.getInputStream();
+        InputStream ins = resource.getInputStream()
         try {
-            return createTemplate(ins, resource, pageName);
+            return createTemplate(ins, resource, pageName)
         }
         finally {
-            ins.close();
+            ins.close()
         }
     }
 
     private Template createTemplate(InputStream inputStream, Resource resource, String pageName) {
-        GroovyPageMetaInfo metaInfo = buildPageMetaInfo(inputStream, resource, pageName);
+        GroovyPageMetaInfo metaInfo = buildPageMetaInfo(inputStream, resource, pageName)
         if (useCache) {
-            pageCache.put(pageName, metaInfo);
+            pageCache.put(pageName, metaInfo)
         }
-        return new GroovyPageTemplate(metaInfo);
+        return new GroovyPageTemplate(metaInfo)
     }
 
-
     private Template createTemplate(InputStream inputStream, String pageName) {
-        GroovyPageMetaInfo metaInfo = buildPageMetaInfo(inputStream, null, pageName);
-        return new GroovyPageTemplate(metaInfo);
+        GroovyPageMetaInfo metaInfo = buildPageMetaInfo(inputStream, null, pageName)
+        return new GroovyPageTemplate(metaInfo)
     }
 
     private GroovyPageMetaInfo buildPageMetaInfo(InputStream inputStream, Resource res, String pageName) {
-        String name = pageName;
+        String name = pageName
 
-        GroovyPageParser parser;
-        String path = res.getDescription();
+        GroovyPageParser parser
+        String path = res.getDescription()
         try {
-            String encoding = GroovyPageParser.DEFAULT_ENCODING;
+            String encoding = GroovyPageParser.DEFAULT_ENCODING
             if (grailsApplication != null) {
-                Map<String, Object> config = grailsApplication.getFlatConfig();
-                Object gspEnc = config.get(GroovyPageParser.CONFIG_PROPERTY_GSP_ENCODING);
+                Map<String, Object> config = grailsApplication.getFlatConfig()
+                Object gspEnc = config.get(GroovyPageParser.CONFIG_PROPERTY_GSP_ENCODING)
                 if ((gspEnc != null) && (gspEnc.toString().trim().length() > 0)) {
-                    encoding = gspEnc.toString();
+                    encoding = gspEnc.toString()
                 }
-
             }
-            parser = new GroovyPageParser(name, path, path, inputStream, encoding);
-
+            parser = new GroovyPageParser(name, path, path, inputStream, encoding)
         }
         catch (IOException e) {
-            throw new GroovyPagesException("I/O parsing Groovy page [" + (res != null ? res.getDescription() : name) + "]: " + e.getMessage(), e);
+            throw new GroovyPagesException("I/O parsing Groovy page [" + (res != null ? res.getDescription() : name) + "]: " + e.getMessage(), e)
         }
 
-        InputStream ins = parser.parse();
+        InputStream ins = parser.parse()
 
         // Make a new metaInfo
-        GroovyPageMetaInfo metaInfo = createPageMetaInfo(parser, ins);
-        metaInfo.applyLastModifiedFromResource(res);
+        GroovyPageMetaInfo metaInfo = createPageMetaInfo(parser, ins)
+        metaInfo.applyLastModifiedFromResource(res)
         try {
-            metaInfo.setPageClass(compileGroovyPage(ins, name, path, metaInfo));
-            metaInfo.setHtmlParts(parser.getHtmlPartsArray());
+            metaInfo.setPageClass(compileGroovyPage(ins, name, path, metaInfo))
+            metaInfo.setHtmlParts(parser.getHtmlPartsArray())
         }
         catch (GroovyPagesException e) {
-            metaInfo.setCompilationException(e);
+            metaInfo.setCompilationException(e)
         }
 
-        return metaInfo;
+        return metaInfo
     }
 
     private GroovyPageMetaInfo createPageMetaInfo(GroovyPageParser parse, InputStream ins) {
-        GroovyPageMetaInfo pageMeta = new GroovyPageMetaInfo();
-        pageMeta.setGrailsApplication(grailsApplication);
-        pageMeta.setJspTagLibraryResolver(jspTagLibraryResolver);
-        pageMeta.setTagLibraryLookup(gspTagLibraryLookup);
-        pageMeta.setContentType(parse.getContentType());
-        pageMeta.setLineNumbers(parse.getLineNumberMatrix());
-        pageMeta.setJspTags(parse.getJspTags());
-        pageMeta.setCodecName(parse.getDefaultCodecDirectiveValue());
-        pageMeta.initialize();
+        GroovyPageMetaInfo pageMeta = new GroovyPageMetaInfo()
+        pageMeta.setGrailsApplication(grailsApplication)
+        pageMeta.setJspTagLibraryResolver(jspTagLibraryResolver)
+        pageMeta.setTagLibraryLookup(gspTagLibraryLookup)
+        pageMeta.setContentType(parse.getContentType())
+        pageMeta.setLineNumbers(parse.getLineNumberMatrix())
+        pageMeta.setJspTags(parse.getJspTags())
+        pageMeta.setCodecName(parse.getDefaultCodecDirectiveValue())
+        pageMeta.initialize()
         // just return groovy and don't compile if asked
-        if (GrailsUtil.isDevelopmentEnv()) {
-            pageMeta.setGroovySource(ins);
+        if (Environment.isDevelopmentMode()) {
+            pageMeta.setGroovySource(ins)
         }
 
-        return pageMeta;
+        return pageMeta
     }
 
     private Class<?> compileGroovyPage(InputStream ins, String name, String pageName, GroovyPageMetaInfo metaInfo) {
-        GroovyClassLoader groovyClassLoader = findOrInitGroovyClassLoader();
+        GroovyClassLoader groovyClassLoader = findOrInitGroovyClassLoader()
 
         // Compile the script into an object
-        Class<?> scriptClass;
+        Class<?> scriptClass
         try {
-            String groovySource = IOGroovyMethods.getText(ins, GroovyPageParser.GROOVY_SOURCE_CHAR_ENCODING);
-            //System.out.println(groovySource);
+            String groovySource = DefaultGroovyMethods.getText(ins, GroovyPageParser.GROOVY_SOURCE_CHAR_ENCODING)
+            //System.out.println(groovySource)
             //log.debug("classes loaded ${groovyClassLoader.getLoadedClasses().size()}")
-            scriptClass = groovyClassLoader.parseClass(groovySource, name);
+            scriptClass = groovyClassLoader.parseClass(groovySource, name)
             //log.debug("classes loaded ${groovyClassLoader.getLoadedClasses().size()}")
         }
         catch (CompilationFailedException e) {
-            log.error("Compilation error compiling GSP [" + name + "]:" + e.getMessage(), e);
+            log.error("Compilation error compiling GSP [$name]:$e.message", e)
 
-            int lineNumber = GrailsExceptionResolver.extractLineNumber(e);
+            int lineNumber = GrailsExceptionResolver.extractLineNumber(e)
 
-            final int[] lineMappings = metaInfo.getLineNumbers();
+            final int[] lineMappings = metaInfo.getLineNumbers()
             if (lineNumber > 0 && lineNumber < lineMappings.length) {
-                lineNumber = lineMappings[lineNumber - 1];
+                lineNumber = lineMappings[lineNumber - 1]
             }
-            String relativePageName = DefaultErrorsPrinter.makeRelativeIfPossible(pageName);
-            throw new GroovyPagesException("Could not parse script [" + relativePageName + "]: " + e.getMessage(), e, lineNumber, pageName);
+            String relativePageName = DefaultStackTracePrinter.makeRelativeIfPossible(pageName)
+            throw new GroovyPagesException("Could not parse script [$relativePageName]: $e.message", e, lineNumber, pageName)
         }
         catch (IOException e) {
-            String relativePageName = DefaultErrorsPrinter.makeRelativeIfPossible(pageName);
-            throw new GroovyPagesException("IO exception parsing script [" + relativePageName + "]: " + e.getMessage(), e);
+            String relativePageName = DefaultStackTracePrinter.makeRelativeIfPossible(pageName)
+            throw new GroovyPagesException("IO exception parsing script [$relativePageName]: $e.message", e)
         }
-        GroovyPagesMetaUtils.registerMethodMissingForGSP(scriptClass, gspTagLibraryLookup);
+        GroovyPagesMetaUtils.registerMethodMissingForGSP(scriptClass, gspTagLibraryLookup)
 
         if (cleanClassLoaderCache) {
             groovyClassLoader.clearCache()
         }
 
-        return scriptClass;
+        return scriptClass
     }
-
-
-
 
     private synchronized GroovyClassLoader findOrInitGroovyClassLoader() {
         if (myClassLoader == null) {
-            myClassLoader = initGroovyClassLoader(Thread.currentThread().getContextClassLoader());
+            myClassLoader = initGroovyClassLoader(Thread.currentThread().getContextClassLoader())
         }
-        return (GroovyClassLoader) myClassLoader;
+        return (GroovyClassLoader) myClassLoader
     }
-
 
     private GroovyClassLoader initGroovyClassLoader(ClassLoader parent) {
-        CompilerConfiguration compConfig = new CompilerConfiguration();
-        compConfig.setSourceEncoding(GroovyPageParser.GROOVY_SOURCE_CHAR_ENCODING);
-        return new GroovyPageClassLoader(parent, compConfig);
+        CompilerConfiguration compConfig = new CompilerConfiguration()
+        compConfig.setSourceEncoding(GroovyPageParser.GROOVY_SOURCE_CHAR_ENCODING)
+        return new GroovyPageClassLoader(parent, compConfig)
     }
-
 }

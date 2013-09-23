@@ -1,17 +1,16 @@
 package org.grails.plugins.reports
 
 import javax.servlet.ServletContext
-import groovy.util.logging.Commons
 
 import org.apache.commons.logging.LogFactory
 
-public class ReportUtils {
+class ReportUtils {
 
     private static final log = LogFactory.getLog(this)
 
     private static final String REPORTS_FOLDER = "/reports"
 
-    public static void updateReportsFromResources(ServletContext servletContext, List<Map> reportInfoList) {
+    static void updateReportsFromResources(ServletContext servletContext, List<Map> reportInfoList) {
         for(Map reportInfo: reportInfoList) {
             String name = reportInfo.name
             String title = reportInfo.title
@@ -39,8 +38,6 @@ public class ReportUtils {
         String filePath = "${REPORTS_FOLDER}/${filename}"
         log.debug("Loading source from ${filePath}")
         InputStream input = servletContext.getResourceAsStream(filePath)
-        String content = input?.getText() ?: defaultText
-        return content
+        return input?.getText() ?: defaultText
     }
-
 }

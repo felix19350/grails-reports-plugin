@@ -1,11 +1,10 @@
 package org.grails.plugins.reports
 
-import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler
 import org.apache.commons.lang.builder.EqualsBuilder
 import org.apache.commons.lang.builder.HashCodeBuilder
+import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler
 
-public class Report {
-
+class Report {
 
     def grailsApplication
 
@@ -42,7 +41,7 @@ public class Report {
 	}
 
     static constraints = {
-    	name unique: true, maxSize: 255, matches: "[a-zA-Z0-9]+", nullable: false, blank: false
+    	name unique: true, maxSize: 255, matches: "[a-zA-Z0-9]+", blank: false
     	bindingBuilder nullable: true
 	}
 
@@ -52,10 +51,10 @@ public class Report {
 		}
 	}
 
-	def encodeAsJson(){		
+	def encodeAsJson(){
 		return [
 			id: id,
-			name: name, 
+			name: name,
 			title: title,
 			sampleParams: sampleParams,
 			bindingBuilder: bindingBuilder,
@@ -65,30 +64,30 @@ public class Report {
 
 	boolean equals(other) {
         if (other == null) {
-        	return false;
+        	return false
         }
 
         if (this.is(other)) {
-        	return true;
+        	return true
         }
 
         if(!DomainClassArtefactHandler.isDomainClass(other.getClass())) {
-        	return false;
+        	return false
         }
 
         if (!(other.instanceOf(Report))) {
-        	return false;
+        	return false
         }
 
-        EqualsBuilder builder = new EqualsBuilder();
-        builder.append(this.name, other.name);
-        return builder.equals();
+        EqualsBuilder builder = new EqualsBuilder()
+        builder.append(name, other.name)
+        return builder.equals()
     }
 
-    public int hashCode() {
-        HashCodeBuilder builder = new HashCodeBuilder();
-        builder.append(name);
-        return builder.hashCode();
+    int hashCode() {
+        HashCodeBuilder builder = new HashCodeBuilder()
+        builder.append(name)
+        return builder.hashCode()
     }
 
 	String toString() {
@@ -97,9 +96,7 @@ public class Report {
 
 	Map evalSampleParams() {
 		GroovyShell shell = new GroovyShell(grailsApplication.classLoader)
-		def result = shell.evaluate(this.sampleParams)
-		shell = null
-		return result
+		return shell.evaluate(sampleParams)
 	}
 
 	Map evalBinding() {
@@ -108,11 +105,8 @@ public class Report {
 	}
 
 	Map evalBinding(Map params) {
-        GroovyShell shell = new GroovyShell(grailsApplication.classLoader)
+		GroovyShell shell = new GroovyShell(grailsApplication.classLoader)
 		shell.setVariable("params", params)
-		def result = shell.evaluate(this.bindingBuilder)
-		shell = null
-		return result
+		return shell.evaluate(bindingBuilder)
 	}
-
 }

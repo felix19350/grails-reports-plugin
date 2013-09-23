@@ -2,43 +2,42 @@ package org.grails.plugins.reports
 
 import org.springframework.validation.FieldError
 
-
-public class DomainClassException extends RuntimeException {
+class DomainClassException extends RuntimeException {
 
     String errorsString
     String domainClassName
     String ident
     def domainClass
 
-    public DomainClassException(def domainClass){
-        this(domainClass, "An error occurred during an operation on " + domainClass.getClass().getSimpleName())
+    DomainClassException(domainClass){
+        this(domainClass, "An error occurred during an operation on ${domainClass.getClass().simpleName}")
     }
 
-    DomainClassException(def domainClass, String message) {
+    DomainClassException(domainClass, String message) {
         super(message) // RuntimeException
         this.domainClass = domainClass
         extractData(domainClass)
     }
 
-    public DomainClassException(def domainClass, Throwable throwable){
-        super("An error occurred during an operation on " + domainClass.getClass().getSimpleName() + " caused by " +  throwable.getMessage(), throwable)
+    DomainClassException(domainClass, Throwable throwable){
+        super("An error occurred during an operation on ${domainClass.getClass().simpleName} caused by $throwable.message", throwable)
         this.domainClass = domainClass
         extractData(domainClass)
     }
 
-    public DomainClassException(def domainClass, String message, Throwable throwable){
-        super(message + " caused by " +  throwable.getMessage(), throwable)
+    DomainClassException(domainClass, String message, Throwable throwable){
+        super("$message caused by $throwable.message", throwable)
         this.domainClass = domainClass
         extractData(domainClass)
     }
 
-    private extractData(def domainClass) {
-        this.domainClassName = domainClass.getClass().getSimpleName()
+    private extractData(domainClass) {
+        this.domainClassName = domainClass.getClass().simpleName
         this.ident = domainClass.ident()?.toString() ?: "null"
         this.errorsString = extractErrorsString(domainClass)
     }
 
-    static extractErrorsString(def domainClass) {
+    static extractErrorsString(domainClass) {
         String result = ""
         if(domainClass) {
             def ident = domainClass.ident()
@@ -51,5 +50,4 @@ public class DomainClassException extends RuntimeException {
         }
         return result
     }
-
 }

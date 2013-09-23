@@ -13,7 +13,7 @@ class UiTagLib {
      */
     def sortableColumn = {
         attrs, body ->
-            def property = attrs.property;
+            def property = attrs.property
             if (!property) {
                 throwTagError("Tag [sortableColumn] requires attribute [property]")
             }
@@ -207,7 +207,6 @@ class UiTagLib {
 					<i class="icon-calendar"></i>
 				</span>
 			</div>
-			
 		"""
     }
 

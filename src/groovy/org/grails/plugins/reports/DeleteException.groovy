@@ -1,19 +1,16 @@
 package org.grails.plugins.reports
 
-public class DeleteException extends DomainClassException {
+class DeleteException extends DomainClassException {
 
-    public DeleteException(domainClass){
-        super(domainClass, "Can't delete " + domainClass.getClass().getSimpleName())
+    DeleteException(domainClass){
+        super(domainClass, "Can't delete ${domainClass.getClass().simpleName}")
     }
 
-    public DeleteException(domainClass, Throwable throwable) {
-        super(domainClass, "Can't delete " + domainClass.getClass().getSimpleName(), throwable)
+    DeleteException(domainClass, Throwable throwable) {
+        super(domainClass, "Can't delete ${domainClass.getClass().simpleName}", throwable)
     }
 
 	String getErrorsString() {
-	      String result = "id = ${domainClass.ident()}\n" 
-	      return result
+	      "id = ${domainClass.ident()}\n"
 	  }
-
-
 }

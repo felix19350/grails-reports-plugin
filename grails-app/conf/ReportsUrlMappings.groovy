@@ -1,6 +1,6 @@
 class ReportsUrlMappings {
 
-	static mappings = {
+    static mappings = {
 
         name reportsList: "/reports"(controller: "report", parseRequest: true) {
             action = [GET: "list"]
@@ -16,7 +16,6 @@ class ReportsUrlMappings {
             action = [GET: "preview"]
         }
 
-
         // download report
         "/report/download/$id"(controller: "report", parseRequest: true) {
             action = [GET: "download"]
@@ -26,13 +25,5 @@ class ReportsUrlMappings {
         "/report/$id?"(controller: "report", parseRequest: true) {
             action = [GET: "show", PUT: "update", POST: "save", DELETE: "delete"]
         }
-
-        "/$controller/$action?/$id?"{
-			constraints {
-				// apply constraints here
-			}
-		}
-
-		"500"(view:'/error')
-	}
+    }
 }
