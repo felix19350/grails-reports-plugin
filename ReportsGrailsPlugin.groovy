@@ -15,12 +15,7 @@ class ReportsGrailsPlugin {
     def description = '''Tool to generate reports using a template in HTML. It has a UI tool to edit the template at runtime.'''
 
     // URL to the plugin's documentation
-    def documentation = "https://github.com/felix19350/grails-reports-plugin"
-
-    // Extra (optional) plugin metadata
-
-    // License: one of 'APACHE', 'GPL2', 'GPL3'
-    def license = "MIT"
+    def documentation = "http://felix19350.github.io/grails-reports-plugin/"
 
     // Details of company behind the plugin (if there is one)
     // def organization = [ name: "My Company", url: "http://www.my-company.com/" ]
