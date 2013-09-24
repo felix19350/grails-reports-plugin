@@ -94,7 +94,7 @@ class ReportService {
      * Renders an report instance, as pdf, to one http response.
      */
     void renderReport(Report reportInstance, Map binding, HttpServletResponse response, String filesubname = null, boolean isInline = false) {
-        log.debug("Render report '${name}' to http response")
+        log.debug("Render report '${reportInstance.name}' to http response")
         def templateDocument = reportInstance.templateDocument
         def filename = reportInstance.title
 
